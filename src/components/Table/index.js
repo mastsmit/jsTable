@@ -68,7 +68,7 @@ class TableComp extends Component {
     render() {
 
         return (
-            <div className={s.rootTable(this.props.mode)}>
+            <div className={s.rootTable(this.props.colors)}>
                 <Table
                     bordered
                     scroll={{ x: 1300 }}
