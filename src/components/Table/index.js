@@ -101,7 +101,6 @@ class TableComp extends Component {
                 <Table
                     bordered
                     columns={this.state.columns}
-                    // components={this.components}
                     dataSource={this.state.data} />
             </div>
         )
