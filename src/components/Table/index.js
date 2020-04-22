@@ -72,7 +72,9 @@ class TableComp extends Component {
 
 
     // components = {
-    //     header: <CustomTableHeader />
+    //     header: {
+    //         cell: () => <CustomTableHeader />
+    //     }
     // }
 
     onCellClick = (record, e) => {
@@ -99,6 +101,7 @@ class TableComp extends Component {
                 <Table
                     bordered
                     columns={this.state.columns}
+                    // components={this.components}
                     dataSource={this.state.data} />
             </div>
         )
