@@ -1,6 +1,4 @@
 import React, { Component } from 'react';
-// import { getColumns } from './helpers/getColumns';
-import RowTableActions from './RowTableActions';
 import CustomTableHeader from './CustomTableHeader';
 import { Table } from 'antd';
 import * as s from './styles';
@@ -35,6 +33,7 @@ class TableComp extends Component {
             ],
             columns: [
                 {
+<<<<<<< HEAD
                     width: 50,
                     render: () => <RowTableActions handleAdd={this.addRow} />,
                     fixed: 'left',
@@ -45,6 +44,11 @@ class TableComp extends Component {
                     dataIndex: 'date',
                     width: 200,
                     fixed: 'left',
+=======
+                    title: () => <CustomTableHeader />,
+                    dataIndex: 'date',
+                    width: 200,
+>>>>>>> 0ecf5dcf69d5b78d2a029b912555a8f73ce34f59
                 },
                 {
                     title: 'Amount',
@@ -66,41 +70,21 @@ class TableComp extends Component {
                     title: 'Note',
                     dataIndex: 'note',
                 },
+<<<<<<< HEAD
                 {
                     title: () => <RowTableActions isFromColumn={true} handleAdd={this.addColumn} />,
                     key: 'action',
                     width: 100,
                     fixed: 'right'
                 },
+=======
+>>>>>>> 0ecf5dcf69d5b78d2a029b912555a8f73ce34f59
             ],
             count: 3
         };
     }
 
 
-
-    // components = {
-    //     header: {
-    //         cell: () => <CustomTableHeader />
-    //     }
-    // }
-
-    onCellClick = (record, e) => {
-        console.log('record', record, 'event', e);
-    }
-
-    addRow = (record, index) => {
-        const { count, data } = this.state;
-        const newData = { key: count, name: '', age: '', address: '' }
-        this.setState({
-            data: [...data, newData],
-            count: count + 1
-        })
-    }
-
-    addColumn = (record, index) => {
-        console.log('index', index);
-    }
 
     render() {
 
@@ -110,7 +94,6 @@ class TableComp extends Component {
                     bordered
                     scroll={{ x: 1300 }}
                     columns={this.state.columns}
-                    // components={this.components}
                     dataSource={this.state.data} />
             </div>
         )
