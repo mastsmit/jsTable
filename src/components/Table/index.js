@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import CustomTableHeader from './CustomTableHeader';
 import { Table } from 'antd';
 import * as s from './styles';
+import TableHeader from './TableHeader';
 
 
 class TableComp extends Component {
@@ -62,11 +63,14 @@ class TableComp extends Component {
     render() {
 
         return (
-            <div className={s.rootTable}>
-                <Table
-                    bordered
-                    columns={this.state.columns}
-                    dataSource={this.state.data} />
+            <div>
+                <TableHeader />
+                <div className={s.rootTable}>
+                    <Table
+                        bordered
+                        columns={this.state.columns}
+                        dataSource={this.state.data} />
+                </div>
             </div>
         )
     }
