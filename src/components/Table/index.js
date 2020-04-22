@@ -1,6 +1,4 @@
 import React, { Component } from 'react';
-// import { getColumns } from './helpers/getColumns';
-import RowTableActions from './RowTableActions';
 import CustomTableHeader from './CustomTableHeader';
 import { Table } from 'antd';
 import * as s from './styles';
@@ -35,15 +33,9 @@ class TableComp extends Component {
             ],
             columns: [
                 {
-                    width: 50,
-                    render: () => <RowTableActions handleAdd={this.addRow} />
-                },
-
-                {
                     title: () => <CustomTableHeader />,
                     dataIndex: 'date',
                     width: 200,
-                    onCellClick: this.onCellClick
                 },
                 {
                     title: 'Amount',
@@ -60,39 +52,12 @@ class TableComp extends Component {
                     dataIndex: 'note',
                     width: 100,
                 },
-                {
-                    title: () => <RowTableActions isFromColumn={true} handleAdd={this.addColumn} />,
-                    key: 'action',
-                },
             ],
             count: 3
         };
     }
 
 
-
-    // components = {
-    //     header: {
-    //         cell: () => <CustomTableHeader />
-    //     }
-    // }
-
-    onCellClick = (record, e) => {
-        console.log('record', record, 'event', e);
-    }
-
-    addRow = (record, index) => {
-        const { count, data } = this.state;
-        const newData = { key: count, name: '', age: '', address: '' }
-        this.setState({
-            data: [...data, newData],
-            count: count + 1
-        })
-    }
-
-    addColumn = (record, index) => {
-        console.log('index', index);
-    }
 
     render() {
 
@@ -101,7 +66,6 @@ class TableComp extends Component {
                 <Table
                     bordered
                     columns={this.state.columns}
-                    // components={this.components}
                     dataSource={this.state.data} />
             </div>
         )
