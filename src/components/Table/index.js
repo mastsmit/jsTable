@@ -1,10 +1,92 @@
-import React, { Component } from 'react';
+import React, { Component, useContext, useState, useEffect, useRef } from 'react';
 // import { getColumns } from './helpers/getColumns';
 import RowTableActions from './RowTableActions';
 import CustomTableHeader from './CustomTableHeader';
-import { Table } from 'antd';
+import EditableCell, { EditableRow } from './EditableCell';
+import { Table, Input, Button, Popconfirm, Form } from 'antd';
 import * as s from './styles';
 
+// const EditableContext = React.createContext();
+
+// const EditableRow = ({ index, ...props }) => {
+//     const [form] = Form.useForm();
+//     return (
+//         <Form form={form} component={false}>
+//             <EditableContext.Provider value={form}>
+//                 <tr {...props} />
+//             </EditableContext.Provider>
+//         </Form>
+//     );
+// };
+
+// const EditableCell = ({
+//     title,
+//     editable,
+//     children,
+//     dataIndex,
+//     record,
+//     handleSave,
+//     ...restProps
+// }) => {
+//     const [editing, setEditing] = useState(false);
+//     const inputRef = useRef();
+//     const form = useContext(EditableContext);
+//     useEffect(() => {
+//         if (editing) {
+//             inputRef.current.focus();
+//         }
+//     }, [editing]);
+
+//     const toggleEdit = () => {
+//         setEditing(!editing);
+//         form.setFieldsValue({
+//             [dataIndex]: record[dataIndex],
+//         });
+//     };
+
+//     const save = async e => {
+//         try {
+//             const values = await form.validateFields();
+//             toggleEdit();
+//             handleSave({ ...record, ...values });
+//         } catch (errInfo) {
+//             console.log('Save failed:', errInfo);
+//         }
+//     };
+
+//     let childNode = children;
+
+//     if (editable) {
+//         childNode = editing ? (
+//             <Form.Item
+//                 style={{
+//                     margin: 0,
+//                 }}
+//                 name={dataIndex}
+//                 rules={[
+//                     {
+//                         required: true,
+//                         message: `${title} is required.`,
+//                     },
+//                 ]}
+//             >
+//                 <Input ref={inputRef} onPressEnter={save} onBlur={save} />
+//             </Form.Item>
+//         ) : (
+//                 <div
+//                     className="editable-cell-value-wrap"
+//                     style={{
+//                         paddingRight: 24,
+//                     }}
+//                     onClick={toggleEdit}
+//                 >
+//                     {children}
+//                 </div>
+//             );
+//     }
+
+//     return <td {...restProps}>{childNode}</td>;
+// };
 
 class TableComp extends Component {
     constructor(props) {
@@ -43,17 +125,19 @@ class TableComp extends Component {
                     title: () => <CustomTableHeader />,
                     dataIndex: 'date',
                     width: 200,
-                    onCellClick: this.onCellClick
+                    editable: true
                 },
                 {
                     title: 'Amount',
                     dataIndex: 'amount',
                     width: 100,
+                    editable: true
                 },
                 {
                     title: 'Type',
                     dataIndex: 'type',
                     width: 100,
+                    editable: true
                 },
                 {
                     title: 'Note',
@@ -71,15 +155,18 @@ class TableComp extends Component {
 
 
 
-    // components = {
-    //     header: {
-    //         cell: () => <CustomTableHeader />
-    //     }
-    // }
 
-    onCellClick = (record, e) => {
-        console.log('record', record, 'event', e);
-    }
+
+
+    handleSave = row => {
+        const newData = [...this.state.data];
+        const index = newData.findIndex(item => row.key === item.key);
+        const item = newData[index];
+        newData.splice(index, 1, { ...item, ...row });
+        this.setState({
+            data: newData,
+        });
+    };
 
     addRow = (record, index) => {
         const { count, data } = this.state;
@@ -95,13 +182,34 @@ class TableComp extends Component {
     }
 
     render() {
-
+        const components = {
+            body: {
+                cell: () => <EditableCell />
+            }
+        }
+        const columns = this.state.columns.map(col => {
+            if (!col.editable) {
+                return col;
+            }
+            console.log('column', col);
+            return {
+                ...col,
+                onCell: record => ({
+                    record,
+                    editable: col.editable,
+                    dataIndex: col.dataIndex,
+                    title: col.title,
+                    handleSave: this.handleSave,
+                }),
+            };
+        });
         return (
             <div className={s.rootTable}>
                 <Table
                     bordered
-                    columns={this.state.columns}
-                    // components={this.components}
+                    rowClassName={() => 'editable-row'}
+                    columns={columns}
+                    components={components}
                     dataSource={this.state.data} />
             </div>
         )
