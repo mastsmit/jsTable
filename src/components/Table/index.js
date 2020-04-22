@@ -36,6 +36,7 @@ class TableComp extends Component {
                     title: () => <CustomTableHeader />,
                     dataIndex: 'date',
                     width: 200,
+                    fixed: 'left',
                 },
                 {
                     title: 'Amount',
