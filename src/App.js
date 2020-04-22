@@ -5,7 +5,8 @@ import './App.css';
 function App() {
   return (
     <div className="App">
-      <TableComp />
+      <TableComp mode="dark" />
+      <TableComp mode="light" />
     </div>
   );
 }

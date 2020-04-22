@@ -13,11 +13,21 @@ export const getColumns = (props, onCell, addRow) => {
                 title: () => <CustomTableHeader />,
                 dataIndex: 'date',
                 width: 200,
-                onCell
+                fixed: true
             },
             {
                 title: 'Amount',
                 dataIndex: 'amount',
+                width: 100,
+            },
+            {
+                title: 'Column1',
+                dataIndex: 'column1',
+                width: 100,
+            },
+            {
+                title: 'Column2',
+                dataIndex: 'column2',
                 width: 100,
             },
             {

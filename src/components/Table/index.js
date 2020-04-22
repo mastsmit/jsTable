@@ -36,33 +36,41 @@ class TableComp extends Component {
             columns: [
                 {
                     width: 50,
-                    render: () => <RowTableActions handleAdd={this.addRow} />
+                    render: () => <RowTableActions handleAdd={this.addRow} />,
+                    fixed: 'left',
                 },
 
                 {
                     title: () => <CustomTableHeader />,
                     dataIndex: 'date',
                     width: 200,
-                    onCellClick: this.onCellClick
+                    fixed: 'left',
                 },
                 {
                     title: 'Amount',
                     dataIndex: 'amount',
-                    width: 100,
+                },
+                {
+                    title: 'Column1',
+                    dataIndex: 'column1',
+                },
+                {
+                    title: 'Column2',
+                    dataIndex: 'column2',
                 },
                 {
                     title: 'Type',
                     dataIndex: 'type',
-                    width: 100,
                 },
                 {
                     title: 'Note',
                     dataIndex: 'note',
-                    width: 100,
                 },
                 {
                     title: () => <RowTableActions isFromColumn={true} handleAdd={this.addColumn} />,
                     key: 'action',
+                    width: 100,
+                    fixed: 'right'
                 },
             ],
             count: 3
@@ -97,9 +105,10 @@ class TableComp extends Component {
     render() {
 
         return (
-            <div className={s.rootTable}>
+            <div className={s.rootTable(this.props.mode)}>
                 <Table
                     bordered
+                    scroll={{ x: 1300 }}
                     columns={this.state.columns}
                     // components={this.components}
                     dataSource={this.state.data} />
