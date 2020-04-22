@@ -10,7 +10,7 @@ function CustomTableHeader(props) {
 
     return (
         <React.Fragment>
-            <div onClick={() => console.log('fdafdsa')} style={{ padding: '16px' }}>
+            <div onClick={handleClick} style={{ padding: '16px' }}>
                 <div>smit</div>
             </div>
         </React.Fragment>
