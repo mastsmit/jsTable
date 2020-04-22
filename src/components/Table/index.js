@@ -33,22 +33,9 @@ class TableComp extends Component {
             ],
             columns: [
                 {
-<<<<<<< HEAD
-                    width: 50,
-                    render: () => <RowTableActions handleAdd={this.addRow} />,
-                    fixed: 'left',
-                },
-
-                {
                     title: () => <CustomTableHeader />,
                     dataIndex: 'date',
                     width: 200,
-                    fixed: 'left',
-=======
-                    title: () => <CustomTableHeader />,
-                    dataIndex: 'date',
-                    width: 200,
->>>>>>> 0ecf5dcf69d5b78d2a029b912555a8f73ce34f59
                 },
                 {
                     title: 'Amount',
@@ -70,15 +57,6 @@ class TableComp extends Component {
                     title: 'Note',
                     dataIndex: 'note',
                 },
-<<<<<<< HEAD
-                {
-                    title: () => <RowTableActions isFromColumn={true} handleAdd={this.addColumn} />,
-                    key: 'action',
-                    width: 100,
-                    fixed: 'right'
-                },
-=======
->>>>>>> 0ecf5dcf69d5b78d2a029b912555a8f73ce34f59
             ],
             count: 3
         };
