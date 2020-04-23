@@ -10,6 +10,15 @@ function TableSummary(props) {
         setMenuItemArr([...menuItemArr])
     }
 
+    // const handleMouseEnter = (dataIndex) => () => {
+    //     console.log('dataIndex', dataIndex);
+    // }
+
+
+    // const handleMouseLeave = (dataIndex) => () => {
+    //     console.log('dataIndex', dataIndex);
+    // }
+
     useEffect(() => {
         setMenuItemArr(props.columns.map(col => {
             return {
@@ -19,16 +28,34 @@ function TableSummary(props) {
         }));
     }, [])
 
-
-    const getSummaryDropdownItems = ({ dataIndex, summaryValue }) => {
+    const getSummaryDropdownItems = ({ dataIndex, summaryValue, pageData }) => {
+        let isNumber = false;
+        pageData.map(data => {
+            if (typeof (data[dataIndex]) === 'number') {
+                isNumber = true;
+            }
+            return 0;
+        })
         return (
-            <Menu selectedKeys={[summaryValue]} onClick={handleClick(dataIndex)} >
-                <Menu.Item key="none">None</Menu.Item>
-                <Menu.Item key="countAll">Count all</Menu.Item>
-                <Menu.Item key="countUniqueValues">Count unique values</Menu.Item>
-                <Menu.Item key="countEmpty">Count empty</Menu.Item>
-                <Menu.Item key="countNotEmpty">Connt not empty</Menu.Item>
-            </Menu >
+            isNumber ?
+                <Menu selectedKeys={[summaryValue]} onClick={handleClick(dataIndex)} >
+                    <Menu.Item key="none">None</Menu.Item>
+                    <Menu.Item key="countAll">Count all</Menu.Item>
+                    <Menu.Item key="countUniqueValues">Count unique values</Menu.Item>
+                    <Menu.Item key="countEmpty">Count empty</Menu.Item>
+                    <Menu.Item key="countNotEmpty">Connt not empty</Menu.Item>
+                    <Menu.Item key='sum'>Sum</Menu.Item>
+                    <Menu.Item key='min'>Min</Menu.Item>
+                    <Menu.Item key='max'>Max</Menu.Item>
+                </Menu>
+                :
+                <Menu selectedKeys={[summaryValue]} onClick={handleClick(dataIndex)} >
+                    <Menu.Item key="none">None</Menu.Item>
+                    <Menu.Item key="countAll">Count all</Menu.Item>
+                    <Menu.Item key="countUniqueValues">Count unique values</Menu.Item>
+                    <Menu.Item key="countEmpty">Count empty</Menu.Item>
+                    <Menu.Item key="countNotEmpty">Connt not empty</Menu.Item>
+                </Menu >
         )
     }
 
@@ -66,6 +93,14 @@ function TableSummary(props) {
                 });
                 return `NOT EMPTY ${value}`
 
+            case 'sum':
+                pageData.forEach(element => {
+                    if (element[dataIndex]) {
+                        value = value + element[dataIndex]
+                    }
+                })
+                return `SUM ${value}`
+
             default:
                 return 'Calculate';
         }
@@ -74,8 +109,13 @@ function TableSummary(props) {
 
     const renderSummaryDropdown = ({ dataIndex, summaryValue }, pageData) => {
         return (
-            <Dropdown trigger="click" overlay={getSummaryDropdownItems({ dataIndex, summaryValue })}>
-                <th className='table-summary'>
+            <Dropdown trigger="click" overlay={getSummaryDropdownItems({ dataIndex, summaryValue, pageData })}>
+                <th
+                    id={dataIndex}
+                    className='table-summary'
+                // onMouseEnter={handleMouseEnter(dataIndex)}
+                // onMouseLeave={handleMouseLeave(dataIndex)}
+                >
                     <div style={{ display: 'flex' }}>
                         <div>
                             {renderSummaryDetails(dataIndex, summaryValue, pageData)}
