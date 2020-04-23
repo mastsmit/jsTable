@@ -6,8 +6,14 @@ const { Option } = Select;
 
 function SortAction(props) {
     const [addSort, setAddSort] = useState([]);
-    const handleChange = () => {
-        console.log('clicked');
+    const [isPopoverVisible, setIsPopoverVisible] = useState(false);
+
+    const handlePopoverVisibility = () => {
+        setIsPopoverVisible(true);
+    }
+
+    const handleChange = (value) => {
+        console.log('clicked', value);
     }
     const handleRemove = (index) => () => {
         console.log('index', index);
@@ -62,8 +68,8 @@ function SortAction(props) {
     }
     return (
         <React.Fragment>
-            <Popover trigger='click' content={getSortPopover()}>
-                <div role="button" className="table-header-sort-button-text">
+            <Popover trigger="click" placement="bottom" content={getSortPopover()}>
+                <div onClick={handlePopoverVisibility} role="button" className="table-header-sort-button-text">
                     Sort
                     </div>
             </Popover>
