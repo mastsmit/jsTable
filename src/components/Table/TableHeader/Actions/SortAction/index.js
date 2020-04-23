@@ -58,7 +58,7 @@ function SortAction(props) {
         return (
             <div>
                 <div className='sort-overlay-root' style={{ display: 'flex', flexDirection: 'column' }}>
-                    {addSort.map(sort => (
+                    {addSort.map((sort, index) => (
                         sort
                     ))}
                 </div>
