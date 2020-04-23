@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Popover, Select, Button } from 'antd';
+import { Popover, Select, Tooltip } from 'antd';
 import { v4 as uuidv4 } from 'uuid';
 import { PlusOutlined, CloseOutlined } from '@ant-design/icons';
 
@@ -41,7 +41,9 @@ function SortAction(props) {
                     </Select>
                 </div>
                 <div role="button" onClick={() => handleRemove(id)} style={{ cursor: 'pointer' }}>
-                    <CloseOutlined />
+                    <Tooltip title="Remove sort rule">
+                        <CloseOutlined />
+                    </Tooltip>
                 </div>
             </div>
         )
