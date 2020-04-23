@@ -27,7 +27,7 @@ function TableSummary(props) {
                 <Menu.Item key="countAll">Count all</Menu.Item>
                 <Menu.Item key="countUniqueValues">Count unique values</Menu.Item>
                 <Menu.Item key="countEmpty">Count empty</Menu.Item>
-                <Menu.Item key="countNotEmpty">Connt not empty</Menu.Item>
+                <Menu.Item key="countNotEmpty">Count not empty</Menu.Item>
             </Menu >
         )
     }
