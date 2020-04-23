@@ -6,11 +6,18 @@ import * as s from './styles';
 import ReactDragListView from 'react-drag-listview'
 
 const preProcessData = ({ columns }) => {
+    let updatedColumns = []
     if (columns) {
         columns[0].fixed = 'left';
-        const title = columns[0].title;
-        columns[0].title = () => <CustomTableHeader title={title} />
+        updatedColumns = columns.map(col => {
+            console.log('col-title', col.title);
+            const title = col.title;
+            col.title = <CustomTableHeader title={title} />
+            return col
+        })
     }
+    console.log('updatedcolumns', updatedColumns);
+    return updatedColumns;
 }
 
 class TableComp extends Component {
