@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import CustomTableHeader from './CustomTableHeader';
+import TableHeader from './TableHeader';
 import { Table } from 'antd';
 import * as s from './styles';
-import TableHeader from './TableHeader';
+import ReactDragListView from 'react-drag-listview'
 
 
 class TableComp extends Component {
@@ -56,6 +57,19 @@ class TableComp extends Component {
             ],
             count: 3
         };
+
+        const that = this;
+        this.dragProps = {
+            onDragEnd(fromIndex, toIndex) {
+                const columns = that.state.columns;
+                const item = columns.splice(fromIndex, 1)[0];
+                columns.splice(toIndex, 0, item);
+                that.setState({
+                    columns
+                });
+            },
+            nodeSelector: "th"
+        };
     }
 
 
@@ -66,10 +80,12 @@ class TableComp extends Component {
             <div>
                 <TableHeader />
                 <div className={s.rootTable}>
-                    <Table
-                        bordered
-                        columns={this.state.columns}
-                        dataSource={this.state.data} />
+                    <ReactDragListView.DragColumn {...this.dragProps}>
+                        <Table
+                            bordered
+                            columns={this.state.columns}
+                            dataSource={this.state.data} />
+                    </ReactDragListView.DragColumn>
                 </div>
             </div>
         )
