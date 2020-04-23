@@ -84,7 +84,7 @@ function CustomTableHeader(props) {
     return (
         <React.Fragment>
             <Dropdown overlay={menu()} trigger={['click']}>
-                <div >Smit</div>
+                <div >{props.title}</div>
             </Dropdown>
         </React.Fragment>
     )
