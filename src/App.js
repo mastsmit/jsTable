@@ -24,7 +24,20 @@ function App() {
     {
       key: 2,
       date: '2018-04-11',
-      amount: 98,
+      amount: 120,
+      type: 'income',
+      note: 'transfer',
+    },
+    {
+      key: 2,
+      date: '2018-04-12',
+      amount: 120,
+      type: 'income',
+      note: 'transfer',
+    },
+    {
+      key: 2,
+      date: '2018-04-12',
       type: 'income',
       note: 'transfer',
     },
