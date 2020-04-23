@@ -4,12 +4,12 @@ import Title from 'antd/lib/skeleton/Title';
 import ReactDragListView from 'react-drag-listview'
 
 import {
-     FilterOutlined,
-     ArrowUpOutlined,
-     ArrowDownOutlined,
-     ArrowLeftOutlined,
-     ArrowRightOutlined,
-     FontSizeOutlined
+    FilterOutlined,
+    ArrowUpOutlined,
+    ArrowDownOutlined,
+    ArrowLeftOutlined,
+    ArrowRightOutlined,
+    FontSizeOutlined
 } from '@ant-design/icons';
 import * as s from '../styles';
 
@@ -20,72 +20,72 @@ function CustomTableHeader(props) {
     }
 
 
-   const  menu=()=>{
+    const menu = () => {
         const data = [
 
             {
-              name: "Title",
-              icon: <FontSizeOutlined />,
-              selected: false
+                name: "Title",
+                icon: <FontSizeOutlined />,
+                selected: false
             },
             {
-              name: 'Add filter',
-              disabled: false,
-              icon: <FilterOutlined />,
-              selected: false
+                name: 'Add filter',
+                disabled: false,
+                icon: <FilterOutlined />,
+                selected: false
             },
             {
                 name: 'Sort Ascending',
                 disabled: false,
-                icon: <ArrowUpOutlined/>,
+                icon: <ArrowUpOutlined />,
                 selected: false
-              },
-             {
-              name: 'Sort Descending',
-              disabled: false,
-              icon: <ArrowDownOutlined />,
-              selected: false
+            },
+            {
+                name: 'Sort Descending',
+                disabled: false,
+                icon: <ArrowDownOutlined />,
+                selected: false
             },
             {
                 name: 'Insert Left',
                 disabled: false,
                 icon: <ArrowLeftOutlined />,
                 selected: false
-              },
-              {
+            },
+            {
                 name: 'Insert Right',
                 disabled: false,
                 icon: <ArrowRightOutlined />,
                 selected: false
-              }
-          ];
-          return(
-              <div className={s.dropDownStyles}>{
-                data.map(func=>{
-                    return(
+            }
+        ];
+        return (
+            <div className={s.dropDownStyles}>{
+                data.map(func => {
+                    return (
                         <Menu>
                             <Menu.Item>
                                 <React.Fragment>
-                                                 {func.icon}
-                                             <div style={{display:"contents"}}>{func.name}</div>
+                                    {func.icon}
+                                    <div style={{ display: "contents" }}>{func.name}</div>
                                 </React.Fragment>
                             </Menu.Item>
                         </Menu>
                     )
                 })
-              }</div>
-              
-          )
+            }</div>
+
+        )
 
     }
 
-    
+
 
     return (
         <React.Fragment>
-                <Dropdown  overlay={menu()}  trigger={['click']}>
-                    <div size={"large"}>Smit</div>
-                </Dropdown>
+            <Dropdown overlay={menu()} trigger={['click']}>
+                <div >Smit</div>
+            </Dropdown>
         </React.Fragment>
     )
 }
