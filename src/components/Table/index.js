@@ -38,21 +38,27 @@ class TableComp extends Component {
                     title: () => <CustomTableHeader />,
                     dataIndex: 'date',
                     width: 200,
+                    fixed: 'left',
                 },
                 {
                     title: 'Amount',
                     dataIndex: 'amount',
-                    width: 100,
+                },
+                {
+                    title: 'Column1',
+                    dataIndex: 'column1',
+                },
+                {
+                    title: 'Column2',
+                    dataIndex: 'column2',
                 },
                 {
                     title: 'Type',
                     dataIndex: 'type',
-                    width: 100,
                 },
                 {
                     title: 'Note',
                     dataIndex: 'note',
-                    width: 100,
                 },
             ],
             count: 3
@@ -79,10 +85,11 @@ class TableComp extends Component {
         return (
             <div>
                 <TableHeader />
-                <div className={s.rootTable}>
+                <div className={s.rootTable(this.props.colors)}>
                     <ReactDragListView.DragColumn {...this.dragProps}>
                         <Table
                             bordered
+                            scroll={{ x: 1300 }}
                             columns={this.state.columns}
                             dataSource={this.state.data} />
                     </ReactDragListView.DragColumn>
