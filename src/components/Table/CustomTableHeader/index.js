@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Menu, Dropdown, Button, Input } from 'antd';
 import Title from 'antd/lib/skeleton/Title';
+import ReactDragListView from 'react-drag-listview'
+
 import {
      FilterOutlined,
      ArrowUpOutlined,
@@ -82,7 +84,7 @@ function CustomTableHeader(props) {
     return (
         <React.Fragment>
                 <Dropdown  overlay={menu()}  trigger={['click']}>
-                    <Button size={"large"}>Smit</Button>
+                    <div size={"large"}>Smit</div>
                 </Dropdown>
         </React.Fragment>
     )
