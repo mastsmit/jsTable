@@ -27,7 +27,9 @@ export const rootTableHeader = css`
         margin:0px 5px;
     }
     .table-header-sort-button{
+    .table-header-sort-button-text{
         cursor:pointer;
         margin:0px 5px;
     }
+}
 `;
