@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import CustomTableHeader from './CustomTableHeader';
 import TableHeader from './TableHeader';
+import TableSummary from '../TableSummary';
 import { Table } from 'antd';
 import * as s from './styles';
 import ReactDragListView from 'react-drag-listview'
@@ -63,6 +64,7 @@ class TableComp extends Component {
                             bordered
                             scroll={{ x: 1300 }}
                             columns={this.state.columns}
+                            summary={(pageData) => <TableSummary pageData={pageData} columns={this.state.columns} />}
                             dataSource={this.state.data} />
                     </ReactDragListView.DragColumn>
                 </div>
