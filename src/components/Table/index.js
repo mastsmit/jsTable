@@ -5,68 +5,30 @@ import { Table } from 'antd';
 import * as s from './styles';
 import ReactDragListView from 'react-drag-listview'
 
+const preProcessData = ({ columns }) => {
+    if (columns) {
+        columns[0].fixed = 'left';
+        const title = columns[0].title;
+        columns[0].title = () => <CustomTableHeader title={title} />
+    }
+}
 
 class TableComp extends Component {
     constructor(props) {
         super(props);
+        preProcessData(this.props);
         this.state = {
-            data: [
-                {
-                    key: 0,
-                    date: '2018-02-11',
-                    amount: 120,
-                    type: 'income',
-                    note: 'transfer',
-                },
-                {
-                    key: 1,
-                    date: '2018-03-11',
-                    amount: 243,
-                    type: 'income',
-                    note: 'transfer',
-                },
-                {
-                    key: 2,
-                    date: '2018-04-11',
-                    amount: 98,
-                    type: 'income',
-                    note: 'transfer',
-                },
-            ],
-            columns: [
-                {
-                    title: () => <CustomTableHeader />,
-                    dataIndex: 'date',
-                    width: 200,
-                    fixed: 'left',
-                },
-                {
-                    title: 'Amount',
-                    dataIndex: 'amount',
-                },
-                {
-                    title: 'Column1',
-                    dataIndex: 'column1',
-                },
-                {
-                    title: 'Column2',
-                    dataIndex: 'column2',
-                },
-                {
-                    title: 'Type',
-                    dataIndex: 'type',
-                },
-                {
-                    title: 'Note',
-                    dataIndex: 'note',
-                },
-            ],
+            data: this.props.dataSource,
+            columns: this.props.columns,
             count: 3
         };
 
         const that = this;
         this.dragProps = {
             onDragEnd(fromIndex, toIndex) {
+                if (fromIndex === 0 || toIndex === 0) {
+                    return
+                }
                 const columns = that.state.columns;
                 const item = columns.splice(fromIndex, 1)[0];
                 columns.splice(toIndex, 0, item);
