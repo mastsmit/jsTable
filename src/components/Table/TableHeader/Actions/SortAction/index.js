@@ -9,6 +9,7 @@ function SortAction(props) {
     const [sorterArr, setSorterArr] = useState([]);
     const [isPopoverVisible, setIsPopoverVisible] = useState(false);
 
+    const columns = props.columns;
     const handlePopoverVisibility = () => {
         setIsPopoverVisible(true);
     }
@@ -28,9 +29,9 @@ function SortAction(props) {
             <div style={{ display: 'flex' }} id={id}>
                 <div>
                     <Select defaultValue={column} onChange={handleChange(id, 'column')}>
-                        <Option value="v">v</Option>
-                        <Option value="s">s</Option>
-                        <Option value="u">u</Option>
+                        {columns.map(col => (
+                            <Option value={col.dataIndex}>{col.title}</Option>
+                        ))}
                     </Select>
                 </div>
                 <div>
@@ -51,7 +52,7 @@ function SortAction(props) {
         setSorterArr([...sorterArr, {
             id,
             order: 'ascending',
-            column: 's'
+            column: 'date'
         }]);
     }
     const getAddSortButton = () => {
@@ -72,7 +73,7 @@ function SortAction(props) {
         return (
             <div>
                 <div className='sort-overlay-root' style={{ display: 'flex', flexDirection: 'column' }}>
-                    {sorterArr.map((sortObj) => renderSort(sortObj))}
+                    {sorterArr.map((sortObj) => renderSort(sortObj, columns))}
                 </div>
                 {getAddSortButton()}
             </div>
