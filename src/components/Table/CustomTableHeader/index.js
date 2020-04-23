@@ -63,7 +63,7 @@ function CustomTableHeader(props) {
             <div className={s.dropDownStyles}>{
                 data.map(func => {
                     return (
-                        <Menu>
+                        <Menu key={func.name}>
                             <Menu.Item>
                                 <React.Fragment>
                                     {func.icon}

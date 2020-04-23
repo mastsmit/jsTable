@@ -12,7 +12,7 @@ const preProcessData = ({ columns }) => {
         updatedColumns = columns.map(col => {
             console.log('col-title', col.title);
             const title = col.title;
-            col.title = <CustomTableHeader title={title} />
+            col.title = <CustomTableHeader key={col.dataIndex} title={title} />
             return col
         })
     }
