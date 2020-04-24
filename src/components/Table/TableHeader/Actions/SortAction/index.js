@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { Popover, Select, Tooltip } from 'antd';
 import { v4 as uuidv4 } from 'uuid';
-import { PlusOutlined, CloseOutlined } from '@ant-design/icons';
+import { PlusOutlined, CloseOutlined, DragOutlined } from '@ant-design/icons';
+import ReactDragListView from 'react-drag-listview'
+
 
 const { Option } = Select;
 
@@ -25,8 +27,13 @@ function SortAction(props) {
     }
 
     const renderSort = ({ id, column, order }) => {
+
         return (
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', margin: '3px' }} id={id}>
+
+            <div className="single-sorter-div" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', margin: '3px' }} id={id}>
+                <div className="drag-outlined-icon" style={{ margin: '0px 8px 0px 0px' }}>
+                    <DragOutlined />
+                </div>
                 <div style={{ margin: '0px 8px 0px 0px ' }}>
                     <Select
                         defaultValue={column}
@@ -51,6 +58,7 @@ function SortAction(props) {
                     </Tooltip>
                 </div>
             </div>
+
         )
     }
 
@@ -71,16 +79,24 @@ function SortAction(props) {
         )
     }
     const getSortPopover = () => {
-        // if (addSort.length === 0) {
-        //     return (
-        //         getAddSortButton()
-        //     )
-        // }
+
+        const dragProps = {
+            onDragEnd(fromIndex, toIndex) {
+                console.log('helloiamhere', fromIndex, toIndex);
+                const item = sorterArr.splice(fromIndex, 1)[0];
+                sorterArr.splice(toIndex, 0, item);
+                setSorterArr(sorterArr);
+            },
+            nodeSelector: '.single-sorter-div',
+            handleSelector: '.drag-outlined-icon'
+        };
         console.log('addSort', sorterArr);
         return (
             <div>
                 <div className='sort-overlay-root' style={{ display: 'flex', flexDirection: 'column' }}>
-                    {sorterArr.map((sortObj) => renderSort(sortObj, columns))}
+                    <ReactDragListView {...dragProps}>
+                        {sorterArr.map((sortObj) => renderSort(sortObj, columns))}
+                    </ReactDragListView>
                 </div>
                 {getAddSortButton()}
             </div>

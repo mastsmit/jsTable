@@ -41,6 +41,7 @@ class TableComp extends Component {
 
         this.dragProps = {
             onDragEnd(fromIndex, toIndex) {
+                console.log('from inde, tounde', fromIndex, toIndex)
                 if (fromIndex === 0 || toIndex === 0) {
                     return
                 }
@@ -51,7 +52,7 @@ class TableComp extends Component {
                     columns
                 });
             },
-            nodeSelector: "th"
+            nodeSelector: "th",
         };
     }
 

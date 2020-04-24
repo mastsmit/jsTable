@@ -162,9 +162,11 @@ function TableSummary(props) {
     }
     return (
         <tr>
-            {menuItemArr.map((menuItem, index) => (
-                renderSummaryDropdown(menuItem, props.pageData, props.columnDataType)
-            ))}
+            {
+                menuItemArr.map((menuItem, index) => (
+                    renderSummaryDropdown(menuItem, props.pageData, props.columnDataType)
+                ))
+            }
         </tr>
     )
 }

@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { Popover, Select, Input, Tooltip } from 'antd';
 import { v4 as uuidv4 } from 'uuid';
-import { PlusOutlined, CloseOutlined } from '@ant-design/icons';
+import { PlusOutlined, CloseOutlined, DragOutlined } from '@ant-design/icons';
+import ReactDragListView from 'react-drag-listview'
 
 const { Option } = Select;
 
@@ -30,7 +31,10 @@ function FilterAction(props) {
         const lessThan = "<";
         const lessThanEqualTo = "<=";
         return (
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', margin: '3px' }} id={id}>
+            <div className="single-filter-div" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', margin: '3px' }} id={id}>
+                <div className='drag-outlined-icon' style={{ cursor: 'pointer', margin: '0px 8px 0px 0px' }}>
+                    <DragOutlined />
+                </div>
                 {index !== 0 &&
                     <div className='filter-boolean-condition' style={{ margin: '0px 8px 0px 0px ' }}>
                         <Select defaultValue={condition} onChange={handleChange(id, 'condition')}>
@@ -104,10 +108,22 @@ function FilterAction(props) {
 
 
     const getFilterPopover = () => {
+        const dragProps = {
+            onDragEnd(fromIndex, toIndex) {
+                console.log('helloiamhere', fromIndex, toIndex);
+                const item = filterArr.splice(fromIndex, 1);
+                filterArr.splice(toIndex, 0, item);
+                setFilterArr(filterArr);
+            },
+            nodeSelector: '.single-filter-div',
+            handleSelector: '.drag-outlined-icon'
+        };
         return (
             <div>
                 <div className='sort-overlay-root' style={{ display: 'flex', flexDirection: 'column' }}>
-                    {filterArr.map((sortObj, index) => renderFilter(sortObj, index))}
+                    <ReactDragListView {...dragProps}>
+                        {filterArr.map((sortObj, index) => renderFilter(sortObj, index))}
+                    </ReactDragListView>
                 </div>
                 {getAddFilterButton()}
             </div>
