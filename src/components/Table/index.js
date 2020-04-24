@@ -83,7 +83,7 @@ class TableComp extends Component {
     render() {
 
         return (
-            <div>
+            <div style={{margin:"0px 50px"}}>
                 <TableHeader />
                 <div className={s.rootTable(this.props.colors)}>
                     <ReactDragListView.DragColumn {...this.dragProps}>

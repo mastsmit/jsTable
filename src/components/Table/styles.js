@@ -1,26 +1,35 @@
 import { css } from 'emotion';
 
 export const rootTable = (colors) => css`
-.ant-table-thead > tr > th{
-    padding: 0px;
-}
-    .ant-table-thead{
-        .ant-table-cell{
-            :hover{
-                background-color:grey;
-            }
-        background-color:${colors.cellColor};
-        color:${colors.cellTextColor};
+
+.ant-table table {
+
+    .ant-table-thead > tr > th{
+        :hover{
+            background-color:grey !important;
+        }
+    }
+        .ant-table-thead{
+            .ant-table-cell{
+            padding: 4px 10px !important;
+            background-color:${colors.cellColor};
+            color:${colors.cellTextColor};
+        }
+    }
+
+.ant-table-tbody > tr > td{
+    :hover{
+        background-color:grey !important;
     }
 }
-    
     .ant-table-tbody{
         .ant-table-cell{
+        padding: 4px 10px !important;
         background-color:${colors.cellColor};
         color:${colors.cellTextColor};
      }
     }
-`;
+}`;
 
 
 export const dropDownStyles = css`

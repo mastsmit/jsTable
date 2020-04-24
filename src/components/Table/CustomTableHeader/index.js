@@ -15,19 +15,9 @@ import * as s from '../styles';
 
 function CustomTableHeader(props) {
     const [columnPropertyName, setColumnPropertyName] = useState("");
-    const handleClick = () => {
-        console.log("hello")
-    }
-
 
     const menu = () => {
         const data = [
-
-            {
-                name: "Title",
-                icon: <FontSizeOutlined />,
-                selected: false
-            },
             {
                 name: 'Add filter',
                 disabled: false,
