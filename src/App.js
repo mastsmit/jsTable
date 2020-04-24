@@ -75,7 +75,7 @@ function App() {
       title: 'Date',
       dataIndex: 'date',
       width: 200,
-      columnDataType: 'date',
+      columnDataType: 'text',
     },
     {
       title: 'Amount',

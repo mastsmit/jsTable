@@ -11,7 +11,7 @@ function TableHeader(props) {
     return (
         <div className={s.rootTableHeader}>
             <div className="table-header-filter-button">
-                <FilterAction columns={props.columns} />
+                <FilterAction columns={props.columns} columnDataType={props.columnDataType} />
             </div>
             <div className="table-header-sort-button">
                 <SortAction handleChange={handleChange} columns={props.columns} handleSorter={props.handleSorter} />

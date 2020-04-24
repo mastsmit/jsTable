@@ -8,7 +8,8 @@ const { Option } = Select;
 function FilterAction(props) {
     const [filterArr, setFilterArr] = useState([]);
     const columns = props.columns;
-
+    const columnDataType = props.columnDataType;
+    console.log('columnDataType', columnDataType);
     const handleChange = (id, type) => (event) => {
         const tempSorters = [...filterArr];
         if (type === 'textInput') {
@@ -26,8 +27,10 @@ function FilterAction(props) {
     }
 
     const renderFilter = ({ id, column, filters, condition }, index) => {
+        const lessThan = "<";
+        const lessThanEqualTo = "<=";
         return (
-            <div style={{ display: 'flex', justifyContent: 'space-between', margin: '3px' }} id={id}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', margin: '3px' }} id={id}>
                 {index !== 0 &&
                     <div className='filter-boolean-condition' style={{ margin: '0px 8px 0px 0px ' }}>
                         <Select defaultValue={condition} onChange={handleChange(id, 'condition')}>
@@ -43,20 +46,34 @@ function FilterAction(props) {
                         ))}
                     </Select>
                 </div>
+
                 <div className="filter-options" style={{ margin: '0px 8px 0px 0px' }}>
-                    <Select defaultValue={filters} onChange={handleChange(id, 'filters')}>
-                        <Option value="contains">Contains</Option>
-                        <Option value="is">Is</Option>
-                        <Option value="isNot">Is not</Option>
-                        <Option value="doesNotContain">Does not contain</Option>
-                        <Option value="isEmpty">Is empty</Option>
-                        <Option value="isNotEmpty">Is not empty</Option>
-                    </Select>
+                    {columnDataType[column] === 'text' &&
+                        <Select defaultValue={filters} onChange={handleChange(id, 'filters')}>
+                            <Option value="contains">Contains</Option>
+                            <Option value="is">Is</Option>
+                            <Option value="isNot">Is not</Option>
+                            <Option value="doesNotContain">Does not contain</Option>
+                            <Option value="isEmpty">Is empty</Option>
+                            <Option value="isNotEmpty">Is not empty</Option>
+                        </Select>
+                    }
+                    {
+                        columnDataType[column] === 'number' &&
+                        <Select defaultValue={filters} onChange={handleChange(id, 'filters')}>
+                            <Option value="equalTo"> = </Option>
+                            <Option value="isNotEqualTo"> != </Option>
+                            <Option value="greaterThan"> > </Option>
+                            <Option value="lessThan">{lessThan} </Option>
+                            <Option value="greaterThanEqualTo">>=</Option>
+                            <Option value="lessThanEqualTo">{lessThanEqualTo}</Option>
+                        </Select>
+                    }
                 </div>
                 <div className="filter-text-input">
                     <Input id={id} placeholder="value" onChange={handleChange(id, 'textInput')} />
                 </div>
-                <div role="button" onClick={() => handleRemove(id)} style={{ cursor: 'pointer', margin: '0px 5px 0px 8px' }}>
+                <div role="button" onClick={() => handleRemove(id)} style={{ cursor: 'pointer', margin: '0px 0px 0px 8px' }}>
                     <Tooltip title="Remove filter rule">
                         <CloseOutlined />
                     </Tooltip>
@@ -69,7 +86,7 @@ function FilterAction(props) {
         const id = uuidv4();
         setFilterArr([...filterArr, {
             id,
-            column: 'date',
+            column: 'column1',
             filters: 'contains',
             condition: 'and',
             textInput: ''

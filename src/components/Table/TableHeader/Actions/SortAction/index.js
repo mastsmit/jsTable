@@ -26,8 +26,8 @@ function SortAction(props) {
 
     const renderSort = ({ id, column, order }) => {
         return (
-            <div style={{ display: 'flex', justifyContent: 'space-between' }} id={id}>
-                <div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', margin: '3px' }} id={id}>
+                <div style={{ margin: '0px 8px 0px 0px ' }}>
                     <Select
                         defaultValue={column}
                         onChange={handleChange(id, 'column')}
@@ -39,13 +39,13 @@ function SortAction(props) {
                         ))}
                     </Select>
                 </div>
-                <div>
+                <div style={{ margin: '0px 8px 0px 0px ' }}>
                     <Select defaultValue={order} onChange={handleChange(id, 'order')}>
                         <Option value="ascending">Ascending</Option>
                         <Option value="descending">Descending</Option>
                     </Select>
                 </div>
-                <div role="button" onClick={() => handleRemove(id)} style={{ cursor: 'pointer' }}>
+                <div role="button" onClick={() => handleRemove(id)} style={{ cursor: 'pointer', margin: '0px 0px 0px 8px' }}>
                     <Tooltip title="Remove sort rule">
                         <CloseOutlined />
                     </Tooltip>

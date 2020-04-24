@@ -64,7 +64,7 @@ class TableComp extends Component {
 
         return (
             <div>
-                <TableHeader columns={this.state.columns} handelSorter={this.handelSorter} />
+                <TableHeader columns={this.state.columns} handelSorter={this.handelSorter} columnDataType={this.columnDataType} />
                 <div className={s.rootTable(this.props.colors)}>
                     <ReactDragListView.DragColumn {...this.dragProps}>
                         <Table
