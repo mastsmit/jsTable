@@ -1,10 +1,17 @@
 import { css } from 'emotion';
 
 export const rootTable = (colors) => css`
+.ant-table.ant-table-bordered thead > tr > th{
+    border-right: 1px solid grey !important;
+
+}
+.ant-table.ant-table-bordered tbody > tr > td{
+    border-right: 1px solid grey !important;
+}
 
 .ant-table table {
-
     .ant-table-thead > tr > th{
+        border-bottom: 1px solid grey;
         :hover{
             background-color:grey !important;
         }
@@ -18,6 +25,7 @@ export const rootTable = (colors) => css`
     }
 
 .ant-table-tbody > tr > td{
+    border-bottom: 1px solid grey;
     :hover{
         background-color:grey !important;
     }
