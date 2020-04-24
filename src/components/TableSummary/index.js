@@ -34,7 +34,6 @@ function TableSummary(props) {
 
     const renderSummaryDetails = (dataIndex, summaryValue, pageData) => {
         let value = 0;
-        console.log('pageData', pageData);
         switch (summaryValue) {
             case 'countAll':
                 value = pageData.length;
@@ -74,7 +73,7 @@ function TableSummary(props) {
 
     const renderSummaryDropdown = ({ dataIndex, summaryValue }, pageData) => {
         return (
-            <Dropdown trigger="click" overlay={getSummaryDropdownItems({ dataIndex, summaryValue })}>
+            <Dropdown key={dataIndex} trigger="click" overlay={getSummaryDropdownItems({ dataIndex, summaryValue })}>
                 <th className='table-summary'>
                     <div style={{ display: 'flex' }}>
                         <div>

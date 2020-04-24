@@ -28,7 +28,12 @@ function SortAction(props) {
         return (
             <div style={{ display: 'flex' }} id={id}>
                 <div>
-                    <Select defaultValue={column} onChange={handleChange(id, 'column')}>
+                    <Select
+                        defaultValue={column}
+                        onChange={handleChange(id, 'column')}
+                    // dropdownStyle={{ backgroundColor: '#3f4447' }}
+                    // defaultOpen={true}
+                    >
                         {columns.map(col => (
                             <Option value={col.dataIndex}>{col.title}</Option>
                         ))}

@@ -6,7 +6,7 @@ import { Table } from 'antd';
 import * as s from './styles';
 import ReactDragListView from 'react-drag-listview'
 
-const preProcessData = ({ columns }) => {
+const preProcessData = ({ columns }, handleSorter) => {
     let updatedColumns = []
     if (columns) {
         columns[0].fixed = 'left';
@@ -63,6 +63,11 @@ class TableComp extends Component {
                         <Table
                             bordered
                             scroll={{ x: 1300 }}
+                            pagination={{
+                                total: this.state.data.length,
+                                showTotal: total => `total ${total} items`,
+                                responsive: true,
+                            }}
                             columns={this.state.columns}
                             summary={(pageData) => <TableSummary pageData={pageData} columns={this.state.columns} />}
                             dataSource={this.state.data} />
