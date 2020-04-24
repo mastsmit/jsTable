@@ -26,7 +26,7 @@ function SortAction(props) {
 
     const renderSort = ({ id, column, order }) => {
         return (
-            <div style={{ display: 'flex' }} id={id}>
+            <div style={{ display: 'flex', justifyContent: 'space-between' }} id={id}>
                 <div>
                     <Select
                         defaultValue={column}

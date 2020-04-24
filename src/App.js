@@ -55,32 +55,53 @@ function App() {
       type: 'income',
       note: 'transfer',
     },
+    {
+      key: 7,
+      date: '2019-02-12',
+      amount: 50,
+      type: 'income',
+      note: 'transfer',
+    },
+    {
+      key: 8,
+      date: '2019-07-12',
+      amount: 10,
+      type: 'income',
+      note: 'transfer',
+    },
   ]
   const columns = [
     {
       title: 'Date',
       dataIndex: 'date',
       width: 200,
+      columnDataType: 'date',
     },
     {
       title: 'Amount',
       dataIndex: 'amount',
+      type: 'date',
+      columnDataType: 'number',
     },
     {
       title: 'Column1',
       dataIndex: 'column1',
+      columnDataType: 'text',
     },
     {
       title: 'Column2',
       dataIndex: 'column2',
+      columnDataType: 'text',
     },
     {
       title: 'Type',
       dataIndex: 'type',
+      columnDataType: 'text',
     },
     {
       title: 'Note',
       dataIndex: 'note',
+      columnDataType: 'text',
     },
   ]
   return (

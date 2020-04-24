@@ -32,6 +32,13 @@ class TableComp extends Component {
         };
 
         const that = this;
+
+        this.columnDataType = {};
+
+        this.props.columns.map(col => (
+            this.columnDataType[col.dataIndex] = col.columnDataType
+        ))
+
         this.dragProps = {
             onDragEnd(fromIndex, toIndex) {
                 if (fromIndex === 0 || toIndex === 0) {
@@ -69,7 +76,7 @@ class TableComp extends Component {
                                 responsive: true,
                             }}
                             columns={this.state.columns}
-                            summary={(pageData) => <TableSummary pageData={pageData} columns={this.state.columns} />}
+                            summary={(pageData) => <TableSummary pageData={pageData} columnDataType={this.columnDataType} columns={this.state.columns} />}
                             dataSource={this.state.data} />
                     </ReactDragListView.DragColumn>
                 </div>
