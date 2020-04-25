@@ -9,7 +9,18 @@ export const rootTable = (colors) => css`
     border-right: 1px solid grey !important;
 }
 
+
+.ant-table.ant-table-bordered .ant-table-container {
+     border: none !important; 
+    border-right: none !important; 
+    border-bottom: none !important;
+}
+.ant-table tfoot > tr > th {
+    background: ${colors.cellColor} !important;
+     border-bottom: 1px solid ${colors.cellColor} !important; 
+}
 .ant-table table {
+   
     .ant-table-thead > tr > th{
         border-bottom: 1px solid grey;
         :hover{
@@ -20,7 +31,7 @@ export const rootTable = (colors) => css`
             .ant-table-cell{
             padding: 4px 10px !important;
             background-color:${colors.cellColor};
-            color:${colors.cellTextColor};
+            color:${colors.headerTextColor};
         }
     }
 
@@ -40,11 +51,10 @@ export const rootTable = (colors) => css`
 }`;
 
 
-export const dropDownStyles = css`
+export const dropDownStyles = (colors) => css`
   width:200px !important;
-
   .ant-menu-item{
-      background: #222933 !important;
+    background-color:${colors.headerTextColor} !important;
       color: silver !important;
       margin: 0px;
       padding: 0px;
@@ -53,7 +63,7 @@ export const dropDownStyles = css`
     margin-top: 0px;
     margin-bottom: 0px;
     :hover{
-        background: blue !important;
+        background: transperant  !important;
     }
   }
 `;

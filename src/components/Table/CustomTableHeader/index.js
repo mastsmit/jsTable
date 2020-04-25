@@ -15,7 +15,6 @@ import * as s from '../styles';
 
 function CustomTableHeader(props) {
     const [columnPropertyName, setColumnPropertyName] = useState("");
-
     const menu = () => {
         const data = [
             {
@@ -49,11 +48,13 @@ function CustomTableHeader(props) {
                 selected: false
             }
         ];
+        console.log(props.colors,"aaa")
         return (
-            <div className={s.dropDownStyles}>{
+
+            <div className={s.dropDownStyles(props.colors)}>{
                 data.map(func => {
                     return (
-                        <Menu>
+                        <Menu key={func.name}>
                             <Menu.Item>
                                 <React.Fragment>
                                     {func.icon}
@@ -74,7 +75,7 @@ function CustomTableHeader(props) {
     return (
         <React.Fragment>
             <Dropdown overlay={menu()} trigger={['click']}>
-                <div >Smit</div>
+                <div >{props.title}</div>
             </Dropdown>
         </React.Fragment>
     )
