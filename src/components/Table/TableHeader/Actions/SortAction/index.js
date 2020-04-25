@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { Popover, Select, Tooltip } from 'antd';
 import { v4 as uuidv4 } from 'uuid';
-import { PlusOutlined, CloseOutlined } from '@ant-design/icons';
+import { PlusOutlined, CloseOutlined, DragOutlined } from '@ant-design/icons';
+import ReactDragListView from 'react-drag-listview'
+
 
 const { Option } = Select;
 
@@ -25,27 +27,38 @@ function SortAction(props) {
     }
 
     const renderSort = ({ id, column, order }) => {
+
         return (
-            <div style={{ display: 'flex' }} id={id}>
-                <div>
-                    <Select defaultValue={column} onChange={handleChange(id, 'column')}>
+
+            <div className="single-sorter-div" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', margin: '3px' }} id={id}>
+                <div className="drag-outlined-icon" style={{ margin: '0px 8px 0px 0px' }}>
+                    <DragOutlined />
+                </div>
+                <div style={{ margin: '0px 8px 0px 0px ' }}>
+                    <Select
+                        defaultValue={column}
+                        onChange={handleChange(id, 'column')}
+                    // dropdownStyle={{ backgroundColor: '#3f4447' }}
+                    // defaultOpen={true}
+                    >
                         {columns.map(col => (
                             <Option value={col.dataIndex}>{col.title}</Option>
                         ))}
                     </Select>
                 </div>
-                <div>
+                <div style={{ margin: '0px 8px 0px 0px ' }}>
                     <Select defaultValue={order} onChange={handleChange(id, 'order')}>
                         <Option value="ascending">Ascending</Option>
                         <Option value="descending">Descending</Option>
                     </Select>
                 </div>
-                <div role="button" onClick={() => handleRemove(id)} style={{ cursor: 'pointer' }}>
+                <div role="button" onClick={() => handleRemove(id)} style={{ cursor: 'pointer', margin: '0px 0px 0px 8px' }}>
                     <Tooltip title="Remove sort rule">
                         <CloseOutlined />
                     </Tooltip>
                 </div>
             </div>
+
         )
     }
 
@@ -66,16 +79,24 @@ function SortAction(props) {
         )
     }
     const getSortPopover = () => {
-        // if (addSort.length === 0) {
-        //     return (
-        //         getAddSortButton()
-        //     )
-        // }
+
+        const dragProps = {
+            onDragEnd(fromIndex, toIndex) {
+                console.log('helloiamhere', fromIndex, toIndex);
+                const item = sorterArr.splice(fromIndex, 1)[0];
+                sorterArr.splice(toIndex, 0, item);
+                setSorterArr(sorterArr);
+            },
+            nodeSelector: '.single-sorter-div',
+            handleSelector: '.drag-outlined-icon'
+        };
         console.log('addSort', sorterArr);
         return (
             <div>
                 <div className='sort-overlay-root' style={{ display: 'flex', flexDirection: 'column' }}>
-                    {sorterArr.map((sortObj) => renderSort(sortObj, columns))}
+                    <ReactDragListView {...dragProps}>
+                        {sorterArr.map((sortObj) => renderSort(sortObj, columns))}
+                    </ReactDragListView>
                 </div>
                 {getAddSortButton()}
             </div>

@@ -6,8 +6,7 @@ import { Table } from 'antd';
 import * as s from './styles';
 import ReactDragListView from 'react-drag-listview'
 
-const preProcessData = ({ columns, colors }) => {
-    console.log(colors,"colors")
+const preProcessData = ({ columns }, handleSorter) => {
     let updatedColumns = []
     if (columns) {
         columns[0].fixed = 'left';
@@ -33,8 +32,16 @@ class TableComp extends Component {
         };
 
         const that = this;
+
+        this.columnDataType = {};
+
+        this.props.columns.map(col => (
+            this.columnDataType[col.dataIndex] = col.columnDataType
+        ))
+
         this.dragProps = {
             onDragEnd(fromIndex, toIndex) {
+                console.log('from inde, tounde', fromIndex, toIndex)
                 if (fromIndex === 0 || toIndex === 0) {
                     return
                 }
@@ -45,7 +52,7 @@ class TableComp extends Component {
                     columns
                 });
             },
-            nodeSelector: "th"
+            nodeSelector: "th",
         };
     }
 
@@ -57,15 +64,20 @@ class TableComp extends Component {
     render() {
 
         return (
-            <div style={{margin:"0px 50px"}}>
-                <TableHeader columns={this.state.columns} handelSorter={this.handelSorter} />
+            <div>
+                <TableHeader columns={this.state.columns} handelSorter={this.handelSorter} columnDataType={this.columnDataType} />
                 <div className={s.rootTable(this.props.colors)}>
                     <ReactDragListView.DragColumn {...this.dragProps}>
                         <Table
                             bordered
                             scroll={{ x: 1300 }}
+                            pagination={{
+                                total: this.state.data.length,
+                                showTotal: total => `total ${total} items`,
+                                responsive: true,
+                            }}
                             columns={this.state.columns}
-                            summary={(pageData) => <TableSummary pageData={pageData} columns={this.state.columns} />}
+                            summary={(pageData) => <TableSummary pageData={pageData} columnDataType={this.columnDataType} columns={this.state.columns} />}
                             dataSource={this.state.data} />
                     </ReactDragListView.DragColumn>
                 </div>

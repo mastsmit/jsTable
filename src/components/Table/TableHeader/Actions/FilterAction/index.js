@@ -1,14 +1,16 @@
 import React, { useState } from 'react';
 import { Popover, Select, Input, Tooltip } from 'antd';
 import { v4 as uuidv4 } from 'uuid';
-import { PlusOutlined, CloseOutlined } from '@ant-design/icons';
+import { PlusOutlined, CloseOutlined, DragOutlined } from '@ant-design/icons';
+import ReactDragListView from 'react-drag-listview'
 
 const { Option } = Select;
 
 function FilterAction(props) {
     const [filterArr, setFilterArr] = useState([]);
     const columns = props.columns;
-
+    const columnDataType = props.columnDataType;
+    console.log('columnDataType', columnDataType);
     const handleChange = (id, type) => (event) => {
         const tempSorters = [...filterArr];
         if (type === 'textInput') {
@@ -26,37 +28,56 @@ function FilterAction(props) {
     }
 
     const renderFilter = ({ id, column, filters, condition }, index) => {
+        const lessThan = "<";
+        const lessThanEqualTo = "<=";
         return (
-            <div style={{ display: 'flex' }} id={id}>
+            <div className="single-filter-div" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', margin: '3px' }} id={id}>
+                <div className='drag-outlined-icon' style={{ cursor: 'pointer', margin: '0px 8px 0px 0px' }}>
+                    <DragOutlined />
+                </div>
                 {index !== 0 &&
-                    <div>
+                    <div className='filter-boolean-condition' style={{ margin: '0px 8px 0px 0px ' }}>
                         <Select defaultValue={condition} onChange={handleChange(id, 'condition')}>
                             <Option value="and">And</Option>
                             <Option value="or">Or</Option>
                         </Select>
                     </div>
                 }
-                <div>
+                <div className="filter-column-options" style={{ margin: '0px 8px 0px 0px' }}>
                     <Select defaultValue={column} onChange={handleChange(id, 'column')}>
                         {columns.map(col => (
                             <Option value={col.dataIndex}>{col.title}</Option>
                         ))}
                     </Select>
                 </div>
-                <div>
-                    <Select defaultValue={filters} onChange={handleChange(id, 'filters')}>
-                        <Option value="contains">Contains</Option>
-                        <Option value="is">Is</Option>
-                        <Option value="isNot">Is not</Option>
-                        <Option value="doesNotContain">Does not contain</Option>
-                        <Option value="isEmpty">Is empty</Option>
-                        <Option value="isNotEmpty">Is not empty</Option>
-                    </Select>
+
+                <div className="filter-options" style={{ margin: '0px 8px 0px 0px' }}>
+                    {columnDataType[column] === 'text' &&
+                        <Select defaultValue={filters} onChange={handleChange(id, 'filters')}>
+                            <Option value="contains">Contains</Option>
+                            <Option value="is">Is</Option>
+                            <Option value="isNot">Is not</Option>
+                            <Option value="doesNotContain">Does not contain</Option>
+                            <Option value="isEmpty">Is empty</Option>
+                            <Option value="isNotEmpty">Is not empty</Option>
+                        </Select>
+                    }
+                    {
+                        columnDataType[column] === 'number' &&
+                        <Select defaultValue={filters} onChange={handleChange(id, 'filters')}>
+                            <Option value="equalTo"> = </Option>
+                            <Option value="isNotEqualTo"> != </Option>
+                            <Option value="greaterThan"> > </Option>
+                            <Option value="lessThan">{lessThan} </Option>
+                            <Option value="greaterThanEqualTo">>=</Option>
+                            <Option value="lessThanEqualTo">{lessThanEqualTo}</Option>
+                        </Select>
+                    }
                 </div>
-                <div>
+                <div className="filter-text-input">
                     <Input id={id} placeholder="value" onChange={handleChange(id, 'textInput')} />
                 </div>
-                <div role="button" onClick={() => handleRemove(id)} style={{ cursor: 'pointer' }}>
+                <div role="button" onClick={() => handleRemove(id)} style={{ cursor: 'pointer', margin: '0px 0px 0px 8px' }}>
                     <Tooltip title="Remove filter rule">
                         <CloseOutlined />
                     </Tooltip>
@@ -69,7 +90,7 @@ function FilterAction(props) {
         const id = uuidv4();
         setFilterArr([...filterArr, {
             id,
-            column: 'date',
+            column: 'column1',
             filters: 'contains',
             condition: 'and',
             textInput: ''
@@ -87,10 +108,22 @@ function FilterAction(props) {
 
 
     const getFilterPopover = () => {
+        const dragProps = {
+            onDragEnd(fromIndex, toIndex) {
+                console.log('helloiamhere', fromIndex, toIndex);
+                const item = filterArr.splice(fromIndex, 1);
+                filterArr.splice(toIndex, 0, item);
+                setFilterArr(filterArr);
+            },
+            nodeSelector: '.single-filter-div',
+            handleSelector: '.drag-outlined-icon'
+        };
         return (
             <div>
                 <div className='sort-overlay-root' style={{ display: 'flex', flexDirection: 'column' }}>
-                    {filterArr.map((sortObj, index) => renderFilter(sortObj, index))}
+                    <ReactDragListView {...dragProps}>
+                        {filterArr.map((sortObj, index) => renderFilter(sortObj, index))}
+                    </ReactDragListView>
                 </div>
                 {getAddFilterButton()}
             </div>

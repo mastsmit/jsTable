@@ -13,36 +13,52 @@ import {
 } from '@ant-design/icons';
 import * as s from '../styles';
 
-function CustomTableHeader(props) {
+function CustomTableHeader({ title }) {
     const [columnPropertyName, setColumnPropertyName] = useState("");
+
+    const handleClick = () => (e) => {
+    }
+
+
     const menu = () => {
         const data = [
             {
+                name: "Title",
+                key: 'title',
+                icon: <FontSizeOutlined />,
+                selected: false
+            },
+            {
                 name: 'Add filter',
+                key: 'addFilter',
                 disabled: false,
                 icon: <FilterOutlined />,
                 selected: false
             },
             {
                 name: 'Sort Ascending',
+                key: 'sortAscending',
                 disabled: false,
                 icon: <ArrowUpOutlined />,
                 selected: false
             },
             {
                 name: 'Sort Descending',
+                key: 'sortDescending',
                 disabled: false,
                 icon: <ArrowDownOutlined />,
                 selected: false
             },
             {
                 name: 'Insert Left',
+                key: 'insertLeft',
                 disabled: false,
                 icon: <ArrowLeftOutlined />,
                 selected: false
             },
             {
                 name: 'Insert Right',
+                key: 'insertRight',
                 disabled: false,
                 icon: <ArrowRightOutlined />,
                 selected: false
@@ -54,8 +70,8 @@ function CustomTableHeader(props) {
             <div className={s.dropDownStyles(props.colors)}>{
                 data.map(func => {
                     return (
-                        <Menu key={func.name}>
-                            <Menu.Item>
+                        <Menu key={func.name} onClick={handleClick()}>
+                            <Menu.Item key={func.key}>
                                 <React.Fragment>
                                     {func.icon}
                                     <div style={{ display: "contents" }}>{func.name}</div>
@@ -75,7 +91,7 @@ function CustomTableHeader(props) {
     return (
         <React.Fragment>
             <Dropdown overlay={menu()} trigger={['click']}>
-                <div >{props.title}</div>
+                <div >{title}</div>
             </Dropdown>
         </React.Fragment>
     )
