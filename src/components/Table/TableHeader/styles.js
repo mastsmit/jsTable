@@ -6,6 +6,7 @@ export const rootTableHeader = css`
     align-items:center;
     color:#37352f99;
     .table-header-search-button{
+        color: white;
         display:flex;
         cursor:pointer;
         .search-icon{
@@ -21,15 +22,31 @@ export const rootTableHeader = css`
             padding:4px 0px ;
             }
         }
+        :hover{
+            background-color: grey;
+            border-radius:2px;        
     }
+}
     .table-header-filter-button{
+        color: white;
         cursor:pointer;
         margin:0px 5px;
+        padding: 3px;
+        :hover{
+            background-color: grey;
+            border-radius:2px;
+        }
     }
     .table-header-sort-button{
     .table-header-sort-button-text{
+        color:white;
         cursor:pointer;
         margin:0px 5px;
+        padding: 3px;
+        :hover{
+            background-color: grey;
+            border-radius:2px;
+        }
     }
 }
 `;

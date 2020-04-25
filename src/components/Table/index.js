@@ -6,7 +6,7 @@ import { Table } from 'antd';
 import * as s from './styles';
 import ReactDragListView from 'react-drag-listview'
 
-const preProcessData = ({ columns }, handleSorter) => {
+const preProcessData = ({ columns, colors }, handleSorter) => {
     let updatedColumns = []
     if (columns) {
         columns[0].fixed = 'left';

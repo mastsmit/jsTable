@@ -64,10 +64,9 @@ function CustomTableHeader({ title }) {
                 selected: false
             }
         ];
-        console.log(props.colors,"aaa")
         return (
 
-            <div className={s.dropDownStyles(props.colors)}>{
+            <div className={s.dropDownStyles}>{
                 data.map(func => {
                     return (
                         <Menu key={func.name} onClick={handleClick()}>

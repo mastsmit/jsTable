@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Dropdown, Menu } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
+import * as s from './styles';
 
 function TableSummary(props) {
     const [menuItemArr, setMenuItemArr] = useState([]);
@@ -147,12 +148,12 @@ function TableSummary(props) {
     const renderSummaryDropdown = ({ dataIndex, summaryValue }, pageData, columnDataType) => {
         return (
             <Dropdown key={dataIndex} trigger="click" overlay={getSummaryDropdownItems({ dataIndex, summaryValue, columnDataType })}>
-                <th className='table-summary'>
-                    <div style={{ display: 'flex' }}>
-                        <div>
+                <th className={s.tableSummary}>
+                    <div className="main-div">
+                        <div className="a">
                             {renderSummaryDetails(dataIndex, summaryValue, pageData)}
                         </div>
-                        <div>
+                        <div className='b'>
                             {summaryValue === 'none' && <DownOutlined />}
                         </div>
                     </div>

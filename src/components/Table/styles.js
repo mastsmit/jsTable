@@ -23,6 +23,7 @@ export const rootTable = (colors) => css`
    
     .ant-table-thead > tr > th{
         border-bottom: 1px solid grey;
+        border-top: 1px solid grey;
         :hover{
             background-color:grey !important;
         }
