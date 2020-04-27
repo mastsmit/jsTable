@@ -5,16 +5,26 @@ import SortAction from './Actions/SortAction';
 import FilterAction from './Actions/FilterAction';
 import * as s from './styles';
 function TableHeader(props) {
-    const handleChange = (value) => {
-        console.log('value', value);
-    }
     return (
         <div className={s.rootTableHeader}>
             <div className="table-header-filter-button">
-                <FilterAction columns={props.columns} columnDataType={props.columnDataType} />
+                <FilterAction
+                    columns={props.columns}
+                    columnDataType={props.columnDataType}
+                    showFilter={props.showFilter}
+                    setShowFilter={props.setShowFilter}
+                    setFilterArrProperties={props.setFilterArrProperties}
+                    filterArr={props.filterArr}
+                    handleChangeInFilterArr={props.handleChangeInFilterArr}
+                    handleAddInFilterArr={props.handleAddInFilterArr} />
             </div>
             <div className="table-header-sort-button">
-                <SortAction handleChange={handleChange} columns={props.columns} handleSorter={props.handleSorter} />
+                <SortAction
+                    columns={props.columns}
+                    handleSorter={props.handleSorter}
+                    sorterArr={props.sorterArr}
+                    setSorterArrProperties={props.setSorterArrProperties}
+                />
             </div>
             <div role="button" className="table-header-search-button">
                 <div className="search-icon"><SearchOutlined /></div>
@@ -22,7 +32,7 @@ function TableHeader(props) {
                     <Input
                         placeholder="type to search"
                         allowClear
-                        onChange={(e) => console.log(e.target.value)} />
+                        onChange={(e) => props.handleTableSearch(e.target.value)} />
                 </div>
             </div>
         </div>

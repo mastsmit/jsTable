@@ -6,6 +6,7 @@ import './App.css';
 function App() {
   const darkColors = theme.color.dark;
   const lightColors = theme.color.light;
+  const blueTheme = theme.color.blue;
   const data = [
     {
       key: 0,
@@ -108,6 +109,7 @@ function App() {
     <div className="App">
       <TableComp colors={darkColors} dataSource={data} columns={columns} />
       <TableComp colors={lightColors} dataSource={data} columns={columns} />
+      <TableComp colors={blueTheme} dataSource={data} columns={columns} />
     </div>
   );
 }

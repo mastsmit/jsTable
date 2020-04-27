@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Menu, Dropdown, Button, Input } from 'antd';
+import { v4 as uuidv4 } from 'uuid';
 import Title from 'antd/lib/skeleton/Title';
 import ReactDragListView from 'react-drag-listview'
 
@@ -9,14 +10,47 @@ import {
     ArrowDownOutlined,
     ArrowLeftOutlined,
     ArrowRightOutlined,
-    FontSizeOutlined
+    FontSizeOutlined,
 } from '@ant-design/icons';
 import * as s from '../styles';
 
-function CustomTableHeader({ title }) {
-    const [columnPropertyName, setColumnPropertyName] = useState("");
+function CustomTableColumnHeader({ title, setShowFilter, setFilterArrProperties, columnDataType, dataIndex, setSorterArrProperties, sorterArr, filterArr }) {
 
-    const handleClick = () => (e) => {
+    const handleClick = (dataIndex) => (e) => {
+        console.log('clickedThisManyTimes', dataIndex);
+        switch (e.key) {
+            case 'addFilter': {
+                const id = uuidv4();
+                setFilterArrProperties([...filterArr, {
+                    id,
+                    column: dataIndex,
+                    filters: columnDataType[dataIndex] === 'text' ? 'contains' : 'equalTo',
+                    condition: 'and',
+                    textInput: ''
+                }])
+                setShowFilter()
+                break;
+            }
+            case 'sortAscending': {
+                const id = uuidv4();
+                setSorterArrProperties([...sorterArr, {
+                    id,
+                    order: 'ascending',
+                    column: dataIndex
+                }])
+                break;
+            }
+            case 'sortDescending':
+                const id = uuidv4();
+                setSorterArrProperties([...sorterArr, {
+                    id,
+                    order: 'descending',
+                    column: dataIndex
+                }])
+                break;
+            default:
+                return
+        }
     }
 
 
@@ -68,7 +102,7 @@ function CustomTableHeader({ title }) {
             <div className={s.dropDownStyles}>{
                 data.map(func => {
                     return (
-                        <Menu key={func.name} onClick={handleClick()}>
+                        <Menu key={func.name} onClick={handleClick(dataIndex)}>
                             <Menu.Item key={func.key}>
                                 <React.Fragment>
                                     {func.icon}
@@ -85,7 +119,6 @@ function CustomTableHeader({ title }) {
     }
 
 
-
     return (
         <React.Fragment>
             <Dropdown overlay={menu()} trigger={['click']}>
@@ -94,4 +127,4 @@ function CustomTableHeader({ title }) {
         </React.Fragment>
     )
 }
-export default CustomTableHeader;
+export default CustomTableColumnHeader;

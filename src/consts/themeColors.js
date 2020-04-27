@@ -11,6 +11,12 @@ export const theme = {
             cellTextColor: '#37352f',
             columnCellColor: '#37352f99',
             borderColor: '#37352f17'
+        },
+        blue: {
+            cellColor: '#99CC99',
+            cellTextColor: '#993300',
+            columnCellColor: '#003366',
+            borderColor: '#37352f17'
         }
     }
 }

@@ -8,7 +8,6 @@ import ReactDragListView from 'react-drag-listview'
 const { Option } = Select;
 
 function SortAction(props) {
-    const [sorterArr, setSorterArr] = useState([]);
     const [isPopoverVisible, setIsPopoverVisible] = useState(false);
 
     const columns = props.columns;
@@ -17,13 +16,15 @@ function SortAction(props) {
     }
 
     const handleChange = (id, type) => (value) => {
-        const tempSorters = [...sorterArr];
+        const tempSorters = [...props.sorterArr];
         tempSorters.find(sortObj => sortObj.id === id).type = value;
+        props.setSorterArrProperties(tempSorters);
         console.log('clicked', id, value);
     }
+
     const handleRemove = (id) => {
-        console.log('id------------', id, sorterArr.filter(sortObj => sortObj.id !== id))
-        setSorterArr(sorterArr.filter(sortObj => sortObj.id !== id));
+        console.log('id------------', id, props.sorterArr.filter(sortObj => sortObj.id !== id))
+        props.setSorterArrProperties((props.sorterArr.filter(sortObj => sortObj.id !== id)));
     }
 
     const renderSort = ({ id, column, order }) => {
@@ -62,40 +63,42 @@ function SortAction(props) {
         )
     }
 
-    const handleAddSort = () => () => {
+    const handleAddInSorterArr = () => () => {
         const id = uuidv4();
-        setSorterArr([...sorterArr, {
+        props.setSorterArrProperties([...props.sorterArr, {
             id,
             order: 'ascending',
             column: 'date'
         }]);
     }
+
     const getAddSortButton = () => {
         return (
-            <div role="button" style={{ display: 'flex', cursor: 'pointer' }} onClick={handleAddSort()}>
+            <div role="button" style={{ display: 'flex', cursor: 'pointer' }} onClick={handleAddInSorterArr()}>
                 <div><PlusOutlined /></div>
                 <div>Add a sort</div>
             </div>
         )
     }
     const getSortPopover = () => {
-
         const dragProps = {
             onDragEnd(fromIndex, toIndex) {
                 console.log('helloiamhere', fromIndex, toIndex);
-                const item = sorterArr.splice(fromIndex, 1)[0];
-                sorterArr.splice(toIndex, 0, item);
-                setSorterArr(sorterArr);
+                const tempArr = [...props.sorterArr]
+                console.log('tempArr', tempArr);
+                const item = props.sorterArr.splice(fromIndex, 1)[0];
+                props.sorterArr.splice(toIndex, 0, item);
+                props.setSorterArrProperties(tempArr);
             },
             nodeSelector: '.single-sorter-div',
             handleSelector: '.drag-outlined-icon'
         };
-        console.log('addSort', sorterArr);
+        console.log('addSort', props.sorterArr);
         return (
             <div>
                 <div className='sort-overlay-root' style={{ display: 'flex', flexDirection: 'column' }}>
                     <ReactDragListView {...dragProps}>
-                        {sorterArr.map((sortObj) => renderSort(sortObj, columns))}
+                        {props.sorterArr.map((sortObj) => renderSort(sortObj, columns))}
                     </ReactDragListView>
                 </div>
                 {getAddSortButton()}
