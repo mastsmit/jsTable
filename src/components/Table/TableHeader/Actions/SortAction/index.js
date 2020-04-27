@@ -17,7 +17,7 @@ function SortAction(props) {
 
     const handleChange = (id, type) => (value) => {
         const tempSorters = [...props.sorterArr];
-        tempSorters.find(sortObj => sortObj.id === id).type = value;
+        tempSorters.find(sortObj => sortObj.id === id)[type] = value;
         props.setSorterArrProperties(tempSorters);
         console.log('clicked', id, value);
     }

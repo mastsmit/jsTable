@@ -18,6 +18,7 @@ class TableComp extends Component {
             filterArr: [],
             sorterArr: [],
         };
+        console.log('called super------')
 
         this.columnDataType = {};
 
@@ -49,9 +50,8 @@ class TableComp extends Component {
     }
 
 
+    handelSorter = (column, order) => {
 
-    handelSorter = () => {
-        console.log('hi');
     }
 
     renderCustomTableHeader = (col, title) => {
@@ -98,7 +98,34 @@ class TableComp extends Component {
     }
 
     setSorterArrProperties = (properties) => {
+        console.log('properties', properties);
         this.setState({ sorterArr: properties });
+
+    }
+
+    getTransformedData = () => {
+        const properties = this.state.sorterArr;
+        const compare = (a, b) => {
+            if (properties[0]) {
+                const first = a[properties[0]['column']]
+                const second = b[properties[0]['column']]
+                console.log('a', first, 'b', second);
+                if (first && second) {
+                    if (first < second) {
+                        if (properties[0]['order'] === 'ascending') return -1;
+                        else return 1;
+                    }
+                    if (first > second) {
+                        if (properties[0]['order'] === 'ascending') return 1;
+                        else return -1;
+                    }
+                    return 0;
+                }
+            }
+            else return 1;
+
+        }
+        return this.props.dataSource.sort(compare);
     }
 
     setShowFilter = () => {
@@ -122,6 +149,7 @@ class TableComp extends Component {
 
 
     render() {
+
         return (
             <div>
                 <TableHeader
@@ -153,8 +181,9 @@ class TableComp extends Component {
                                 columnDataType={this.columnDataType}
                                 columns={this.state.columns}
                             />}
-                        dataSource={this.state.data} />
+                        dataSource={this.getTransformedData()} />
                 </div>
+                {this.state.sorterArr.map(a => <div>{a.column}</div>)}
                 {/* <div>
                     <div role="button" onClick={() => { this.setState({ showFilter: true }) }}> click me</div>
                 </div> */}

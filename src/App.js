@@ -107,9 +107,9 @@ function App() {
   ]
   return (
     <div className="App">
-      <TableComp colors={darkColors} dataSource={data} columns={columns} />
+      {/* <TableComp colors={darkColors} dataSource={data} columns={columns} /> */}
       <TableComp colors={lightColors} dataSource={data} columns={columns} />
-      <TableComp colors={blueTheme} dataSource={data} columns={columns} />
+      {/* <TableComp colors={blueTheme} dataSource={data} columns={columns} /> */}
     </div>
   );
 }
