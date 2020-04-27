@@ -55,7 +55,7 @@ export const rootTable = (colors) => css`
 export const dropDownStyles = (colors) => css`
   width:200px !important;
   .ant-menu-item{
-    background-color:${colors.headerTextColor} !important;
+    background-color: ${colors.popUpColor} !important;
       color: silver !important;
       margin: 0px;
       padding: 0px;

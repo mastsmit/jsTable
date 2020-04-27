@@ -11,9 +11,10 @@ import {
     ArrowRightOutlined,
     FontSizeOutlined
 } from '@ant-design/icons';
+
 import * as s from '../styles';
 
-function CustomTableHeader({ title }) {
+function CustomTableHeader({ title ,colors}) {
     const [columnPropertyName, setColumnPropertyName] = useState("");
 
     const handleClick = () => (e) => {
@@ -64,9 +65,11 @@ function CustomTableHeader({ title }) {
                 selected: false
             }
         ];
+        
         return (
-
-            <div className={s.dropDownStyles}>{
+            <React.Fragment>
+            <div>{console.log('colors',colors)}</div>
+            <div className={s.dropDownStyles(colors)}>{
                 data.map(func => {
                     return (
                         <Menu key={func.name} onClick={handleClick()}>
@@ -80,7 +83,7 @@ function CustomTableHeader({ title }) {
                     )
                 })
             }</div>
-
+</React.Fragment>
         )
 
     }
@@ -89,7 +92,7 @@ function CustomTableHeader({ title }) {
 
     return (
         <React.Fragment>
-            <Dropdown overlay={menu()} trigger={['click']}>
+            <Dropdown  overlay={menu()} trigger={['click']}>
                 <div >{title}</div>
             </Dropdown>
         </React.Fragment>

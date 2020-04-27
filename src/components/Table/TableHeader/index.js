@@ -8,6 +8,8 @@ function TableHeader(props) {
     const handleChange = (value) => {
         console.log('value', value);
     }
+
+    
     return (
         <div className={s.rootTableHeader}>
             <div className="table-header-filter-button">
@@ -22,7 +24,7 @@ function TableHeader(props) {
                     <Input
                         placeholder="type to search"
                         allowClear
-                        onChange={(e) => console.log(e.target.value)} />
+                        onChange={(e) => props.handleSearch(e.target.value)} />
                 </div>
             </div>
         </div>

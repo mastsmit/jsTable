@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useState} from 'react';
 import TableComp from './components/Table';
 import { theme } from './consts/themeColors';
 import './App.css';
@@ -10,28 +10,28 @@ function App() {
     {
       key: 0,
       date: '2018-02-11',
-      amount: 120,
+      amount: "120",
       type: 'income',
       note: 'transfer',
     },
     {
       key: 1,
       date: '2018-03-11',
-      amount: 243,
+      amount: "243",
       type: 'income',
       note: 'transfer',
     },
     {
       key: 2,
       date: '2018-04-11',
-      amount: 120,
+      amount: "120",
       type: 'income',
       note: 'transfer',
     },
     {
       key: 3,
       date: '2018-04-12',
-      amount: 120,
+      amount: "120",
       type: 'income',
       note: 'transfer',
     },
@@ -44,28 +44,28 @@ function App() {
     {
       key: 5,
       date: '2018-06-12',
-      amount: 500,
+      amount: "500",
       type: 'income',
       note: 'transfer',
     },
     {
       key: 6,
       date: '2019-06-12',
-      amount: 400,
+      amount: "400",
       type: 'income',
       note: 'transfer',
     },
     {
       key: 7,
       date: '2019-02-12',
-      amount: 50,
+      amount: "50",
       type: 'income',
       note: 'transfer',
     },
     {
       key: 8,
       date: '2019-07-12',
-      amount: 10,
+      amount: "10",
       type: 'income',
       note: 'transfer',
     },
@@ -104,11 +104,23 @@ function App() {
       columnDataType: 'text',
     },
   ]
+
+
+  const [tableData, setTableData] = useState(data);
+
+  const handleSearch=(searchText)=>{
+        let searchData = data.filter(temp =>{
+          //   console.log(temp.amount,"u----------")
+         return temp.amount.includes(searchText);
+          })
+          setTableData(searchData);
+  }
+
   return (
     <div>
       {darkColors?
     <div className="App">
-      <TableComp colors={darkColors} dataSource={data} columns={columns} />
+      <TableComp colors={darkColors} dataSource={tableData} columns={columns} handleSearch={handleSearch}/>
      
     </div>:
      <TableComp colors={lightColors} dataSource={data} columns={columns} />
