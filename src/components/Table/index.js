@@ -1,28 +1,28 @@
 import React, { Component } from 'react';
-import CustomTableColumnHeader from './CustomTableHeader';
+import { observer } from 'mobx-react';
+import CustomTableColumnHeader from './CustomTableColumnHeader';
 import TableHeader from './TableHeader';
 import TableSummary from '../TableSummary';
 import { Table } from 'antd';
 import * as s from './styles';
-import { DragDropContext, Droppable } from 'react-beautiful-dnd';
-import ReactDragListView from 'react-drag-listview'
-
 
 class TableComp extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            data: this.props.dataSource,
-            columns: this.props.columns,
             showFilter: false,
+            showSorter: false,
             filterArr: [],
             sorterArr: [],
         };
-        console.log('called super------')
+        const { model } = this.props;
+        console.log('model----', model)
+        this.data = model.store.data;
+        this.columns = model.store.columns;
 
         this.columnDataType = {};
 
-        this.props.columns.map(col => (
+        this.columns.map(col => (
             this.columnDataType[col.dataIndex] = col.columnDataType
         ))
 
@@ -46,7 +46,7 @@ class TableComp extends Component {
     }
 
     componentDidMount() {
-        this.preProcessData(this.props, this.setShowFilter, this.handleAddInFilterArr);
+        this.preProcessData(this.props.model.store, this.setShowFilter, this.handleAddInFilterArr);
     }
 
 
@@ -54,8 +54,8 @@ class TableComp extends Component {
 
     }
 
-    renderCustomTableHeader = (col, title) => {
-
+    renderCustomTableColumnHeader = (col, title) => {
+        const { setFilterArrProperties, setSorterArrProperties } = this.props.model.store;
         return (
             <CustomTableColumnHeader
                 key={col.dataIndex}
@@ -64,9 +64,9 @@ class TableComp extends Component {
                 setShowFilter={this.setShowFilter}
                 columnDataType={this.columnDataType}
                 filterArr={this.state.filterArr}
-                setFilterArrProperties={this.setFilterArrProperties}
-                handleAddInFilterArr={this.handleAddInFilterArr}
-                setSorterArrProperties={this.setSorterArrProperties}
+                setShowSorter={this.setShowFilter}
+                setFilterArrProperties={setFilterArrProperties}
+                setSorterArrProperties={setSorterArrProperties}
                 sorterArr={this.state.sorterArr}
             />
         )
@@ -79,13 +79,11 @@ class TableComp extends Component {
             updatedColumns = columns.map(col => {
                 console.log('col-title', col.title);
                 const title = col.title;
-                col.title = this.renderCustomTableHeader(col, title)
+                col.title = this.renderCustomTableColumnHeader(col, title)
                 return col
             })
             console.log('came here----smit')
-            this.setState({
-                columns: updatedColumns
-            });
+            this.props.model.store.setTableColumn(updatedColumns);
         }
         console.log('updatedcolumns', updatedColumns);
         return updatedColumns;
@@ -93,95 +91,60 @@ class TableComp extends Component {
 
 
 
-    setFilterArrProperties = (properties) => {
-        this.setState({ filterArr: properties });
-    }
 
-    setSorterArrProperties = (properties) => {
-        console.log('properties', properties);
-        this.setState({ sorterArr: properties });
-
-    }
-
-    getTransformedData = () => {
-        const properties = this.state.sorterArr;
-        const compare = (a, b) => {
-            if (properties[0]) {
-                const first = a[properties[0]['column']]
-                const second = b[properties[0]['column']]
-                console.log('a', first, 'b', second);
-                if (first && second) {
-                    if (first < second) {
-                        if (properties[0]['order'] === 'ascending') return -1;
-                        else return 1;
-                    }
-                    if (first > second) {
-                        if (properties[0]['order'] === 'ascending') return 1;
-                        else return -1;
-                    }
-                    return 0;
-                }
-            }
-            else return 1;
-
-        }
-        return this.props.dataSource.sort(compare);
-    }
 
     setShowFilter = () => {
         console.log('showing jlkjkljklj', this.state.showFilter)
         this.setState({ showFilter: !this.state.showFilter })
     }
 
+    setShowSorter = () => {
+        this.setState({ showSorter: !this.state.showSorter })
+    }
+
     handleTableSearch = (searchText) => {
-        const searchedData = this.props.dataSource.filter(obj => {
-            const tempArr = []
-            for (let key in obj) {
-                if (key !== 'key') {
-                    tempArr.push(obj[key]);
-                }
-            }
-            return JSON.stringify(tempArr).includes(searchText);
-        })
-        console.log('searchedData', searchedData);
-        this.setState({ data: searchedData })
+        this.props.model.store.setSearchText(searchText);
     }
 
 
     render() {
-
+        console.log('table-render');
+        const { computedData, columns, setSorterArrProperties, setFilterArrProperties, sorterArr, filterArr } = this.props.model.store;
         return (
             <div>
                 <TableHeader
-                    columns={this.state.columns}
+                    columns={columns}
                     handleTableSearch={this.handleTableSearch}
                     handelSorter={this.handelSorter}
                     columnDataType={this.columnDataType}
                     showFilter={this.state.showFilter}
                     setShowFilter={this.setShowFilter}
-                    setFilterArrProperties={this.setFilterArrProperties}
-                    filterArr={this.state.filterArr}
-                    sorterArr={this.state.sorterArr}
-                    setSorterArrProperties={this.setSorterArrProperties}
+                    showSorter={this.state.showSorter}
+                    setShowSorter={this.setShowSorter}
+                    setFilterArrProperties={setFilterArrProperties}
+                    filterArr={filterArr}
+                    sorterArr={sorterArr}
+                    setSorterArrProperties={setSorterArrProperties}
                     handleAddInFilterArr={this.handleAddInFilterArr} />
                 <div className={s.rootTable(this.props.colors)}>
                     <Table
                         bordered
                         scroll={{ x: 1300 }}
                         pagination={{
-                            total: this.state.data.length,
+                            total: computedData.length,
                             showTotal: total => `total ${total} items`,
                             responsive: true,
-                            pageSize: 4
+                            pageSize: 20,
+
                         }}
-                        columns={this.state.columns}
+                        columns={columns}
                         summary={(pageData) =>
                             <TableSummary
                                 pageData={pageData}
                                 columnDataType={this.columnDataType}
-                                columns={this.state.columns}
+                                columns={columns}
                             />}
-                        dataSource={this.getTransformedData()} />
+                        dataSource={computedData} />
                 </div>
                 {this.state.sorterArr.map(a => <div>{a.column}</div>)}
                 {/* <div>
@@ -192,4 +155,4 @@ class TableComp extends Component {
     }
 }
 
-export default TableComp;
+export default observer(TableComp);

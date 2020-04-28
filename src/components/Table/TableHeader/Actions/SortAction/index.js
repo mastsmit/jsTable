@@ -107,8 +107,8 @@ function SortAction(props) {
     }
     return (
         <React.Fragment>
-            <Popover trigger="click" placement="bottom" content={getSortPopover()}>
-                <div onClick={handlePopoverVisibility} role="button" className="table-header-sort-button-text">
+            <Popover visible={props.showSorter} trigger="click" placement="bottom" content={getSortPopover()}>
+                <div role="button" className="table-header-sort-button-text" onClick={() => props.setShowSorter()}>
                     Sort
                     </div>
             </Popover>

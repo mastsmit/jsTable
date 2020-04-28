@@ -18,11 +18,12 @@ function FilterAction(props) {
     const handleChange = (id, type) => (event) => {
         const tempFilters = [...props.filterArr];
         if (type === 'textInput') {
-            tempFilters.find(sortObj => sortObj.id === id).type = event.target.value;
+            tempFilters.find(sortObj => sortObj.id === id)[type] = event.target.value;
         }
         else {
-            tempFilters.find(sortObj => sortObj.id === id).type = event;
+            tempFilters.find(sortObj => sortObj.id === id)[type] = event;
         }
+        props.setFilterArrProperties(tempFilters)
         console.log('clicked', id, event);
     }
 
@@ -30,18 +31,19 @@ function FilterAction(props) {
         props.setFilterArrProperties((props.filterArr.filter(sortObj => sortObj.id !== id)));
     }
 
-    const renderFilter = ({ id, column, filters, condition }, index) => {
+    const renderFilter = ({ id, column, filters, condition }, index, conditionValue) => {
         const lessThan = "<";
         const lessThanEqualTo = "<=";
+
         return (
             <div className="single-filter-div" style={{ display: 'flex', alignItems: 'center', margin: '3px', width: '100%' }} id={id}>
                 <div className='drag-outlined-icon' style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     <DragOutlined />
                 </div>
                 <div style={{ display: 'flex', flex: '1 1 auto', minWidth: '0px', margin: '0px 8px 0px 8px' }}>
-                    {index !== 0 &&
+                    {(index !== 0) &&
                         <div className='filter-boolean-condition' style={{ margin: '0px 8px 0px 0px ' }}>
-                            <Select defaultValue={condition} onChange={handleChange(id, 'condition')}>
+                            <Select defaultValue={condition} disabled={index > 1} onChange={handleChange(id, 'condition')} value={conditionValue}>
                                 <Option value="and">And</Option>
                                 <Option value="or">Or</Option>
                             </Select>
@@ -98,7 +100,7 @@ function FilterAction(props) {
             id,
             column: 'column1',
             filters: 'contains',
-            condition: 'and',
+            condition: 'or',
             textInput: ''
         }
         ])
@@ -125,11 +127,14 @@ function FilterAction(props) {
             nodeSelector: '.single-filter-div',
             handleSelector: '.drag-outlined-icon'
         };
+        let conditionValue = null;
+        if (props.filterArr.length === 1) conditionValue = props.filterArr[0]['condition']
+        if (props.filterArr.length > 1) conditionValue = props.filterArr[1]['condition']
         return (
             <div key="43">
                 <div className='sort-overlay-root' style={{ display: 'flex', flexDirection: 'column' }}>
                     <ReactDragListView {...dragProps}>
-                        {props.filterArr.map((filterObj, index) => renderFilter(filterObj, index))}
+                        {props.filterArr.map((filterObj, index) => renderFilter(filterObj, index, conditionValue))}
                     </ReactDragListView>
                 </div>
                 {getAddFilterButton()}

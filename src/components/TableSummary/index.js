@@ -144,10 +144,11 @@ function TableSummary(props) {
     }
 
 
-    const renderSummaryDropdown = ({ dataIndex, summaryValue }, pageData, columnDataType) => {
+    const renderSummaryDropdown = ({ dataIndex, summaryValue }, pageData, columnDataType, index) => {
         return (
             <Dropdown key={dataIndex} trigger="click" overlay={getSummaryDropdownItems({ dataIndex, summaryValue, columnDataType })}>
-                <th className='table-summary'>
+                <th className={index === 0 ? "ant-table-cell ant-table-cell-fix-left ant-table-cell-fix-left-last" : 'table-summary'}
+                    style={index === 0 ? { left: '0px' } : {}}>
                     <div style={{ display: 'flex' }}>
                         <div>
                             {renderSummaryDetails(dataIndex, summaryValue, pageData)}
@@ -164,7 +165,7 @@ function TableSummary(props) {
         <tr>
             {
                 menuItemArr.map((menuItem, index) => (
-                    renderSummaryDropdown(menuItem, props.pageData, props.columnDataType)
+                    renderSummaryDropdown(menuItem, props.pageData, props.columnDataType, index)
                 ))
             }
         </tr>

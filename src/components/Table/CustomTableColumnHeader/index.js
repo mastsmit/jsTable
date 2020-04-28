@@ -1,8 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Menu, Dropdown, Button, Input } from 'antd';
 import { v4 as uuidv4 } from 'uuid';
-import Title from 'antd/lib/skeleton/Title';
-import ReactDragListView from 'react-drag-listview'
 
 import {
     FilterOutlined,
@@ -14,12 +12,21 @@ import {
 } from '@ant-design/icons';
 import * as s from '../styles';
 
-function CustomTableColumnHeader({ title, setShowFilter, setFilterArrProperties, columnDataType, dataIndex, setSorterArrProperties, sorterArr, filterArr }) {
+function CustomTableColumnHeader({ title,
+    setShowFilter,
+    setFilterArrProperties,
+    columnDataType,
+    dataIndex,
+    setSorterArrProperties,
+    sorterArr,
+    filterArr,
+    setShowSorter }) {
 
     const handleClick = (dataIndex) => (e) => {
         console.log('clickedThisManyTimes', dataIndex);
         switch (e.key) {
             case 'addFilter': {
+                console.log('inAddFilterCase');
                 const id = uuidv4();
                 setFilterArrProperties([...filterArr, {
                     id,
@@ -32,21 +39,25 @@ function CustomTableColumnHeader({ title, setShowFilter, setFilterArrProperties,
                 break;
             }
             case 'sortAscending': {
+                console.log('inSortAscendingCase');
                 const id = uuidv4();
                 setSorterArrProperties([...sorterArr, {
                     id,
                     order: 'ascending',
                     column: dataIndex
                 }])
+                setShowSorter();
                 break;
             }
             case 'sortDescending':
                 const id = uuidv4();
-                setSorterArrProperties([...sorterArr, {
+                const temp = [...sorterArr, {
                     id,
                     order: 'descending',
                     column: dataIndex
-                }])
+                }]
+                console.log('tempSorterArr', temp);
+                setSorterArrProperties(temp)
                 break;
             default:
                 return
@@ -56,12 +67,12 @@ function CustomTableColumnHeader({ title, setShowFilter, setFilterArrProperties,
 
     const menu = () => {
         const data = [
-            {
-                name: "Title",
-                key: 'title',
-                icon: <FontSizeOutlined />,
-                selected: false
-            },
+            // {
+            //     name: "Title",
+            //     key: 'title',
+            //     icon: <FontSizeOutlined />,
+            //     selected: false
+            // },
             {
                 name: 'Add filter',
                 key: 'addFilter',
@@ -83,20 +94,20 @@ function CustomTableColumnHeader({ title, setShowFilter, setFilterArrProperties,
                 icon: <ArrowDownOutlined />,
                 selected: false
             },
-            {
-                name: 'Insert Left',
-                key: 'insertLeft',
-                disabled: false,
-                icon: <ArrowLeftOutlined />,
-                selected: false
-            },
-            {
-                name: 'Insert Right',
-                key: 'insertRight',
-                disabled: false,
-                icon: <ArrowRightOutlined />,
-                selected: false
-            }
+            // {
+            //     name: 'Insert Left',
+            //     key: 'insertLeft',
+            //     disabled: false,
+            //     icon: <ArrowLeftOutlined />,
+            //     selected: false
+            // },
+            // {
+            //     name: 'Insert Right',
+            //     key: 'insertRight',
+            //     disabled: false,
+            //     icon: <ArrowRightOutlined />,
+            //     selected: false
+            // }
         ];
         return (
             <div className={s.dropDownStyles}>{

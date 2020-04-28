@@ -22,6 +22,8 @@ function TableHeader(props) {
                 <SortAction
                     columns={props.columns}
                     handleSorter={props.handleSorter}
+                    showSorter={props.showSorter}
+                    setShowSorter={props.setShowSorter}
                     sorterArr={props.sorterArr}
                     setSorterArrProperties={props.setSorterArrProperties}
                 />
