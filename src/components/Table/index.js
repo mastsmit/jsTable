@@ -12,8 +12,6 @@ class TableComp extends Component {
         this.state = {
             showFilter: false,
             showSorter: false,
-            filterArr: [],
-            sorterArr: [],
         };
         const { model } = this.props;
         console.log('model----', model)
@@ -45,9 +43,6 @@ class TableComp extends Component {
         };
     }
 
-    componentDidMount() {
-        this.preProcessData(this.props.model.store, this.setShowFilter, this.handleAddInFilterArr);
-    }
 
 
     handelSorter = (column, order) => {
@@ -63,27 +58,25 @@ class TableComp extends Component {
                 dataIndex={col.dataIndex}
                 setShowFilter={this.setShowFilter}
                 columnDataType={this.columnDataType}
-                filterArr={this.state.filterArr}
-                setShowSorter={this.setShowFilter}
+                filterArr={this.props.model.store.filterArr}
+                setShowSorter={this.setShowSorter}
                 setFilterArrProperties={setFilterArrProperties}
                 setSorterArrProperties={setSorterArrProperties}
-                sorterArr={this.state.sorterArr}
+                sorterArr={this.props.model.store.sorterArr}
             />
         )
     }
 
-    preProcessData = ({ columns }, setShowFilter, handleFilterArr) => {
-        let updatedColumns = []
+    preProcessData = ({ columns }) => {
+        let updatedColumns = JSON.parse(JSON.stringify(columns))
         if (columns) {
-            columns[0].fixed = 'left';
-            updatedColumns = columns.map(col => {
+            updatedColumns.forEach(col => {
                 console.log('col-title', col.title);
-                const title = col.title;
+                const title = col.titleString;
                 col.title = this.renderCustomTableColumnHeader(col, title)
                 return col
             })
             console.log('came here----smit')
-            this.props.model.store.setTableColumn(updatedColumns);
         }
         console.log('updatedcolumns', updatedColumns);
         return updatedColumns;
@@ -110,8 +103,10 @@ class TableComp extends Component {
     render() {
         console.log('table-render');
         const { computedData, columns, setSorterArrProperties, setFilterArrProperties, sorterArr, filterArr } = this.props.model.store;
+        const customColums = this.preProcessData(this.props.model.store);
+        console.log('sort arra update', sorterArr)
         return (
-            <div>
+            <div >
                 <TableHeader
                     columns={columns}
                     handleTableSearch={this.handleTableSearch}
@@ -125,7 +120,7 @@ class TableComp extends Component {
                     filterArr={filterArr}
                     sorterArr={sorterArr}
                     setSorterArrProperties={setSorterArrProperties}
-                    handleAddInFilterArr={this.handleAddInFilterArr} />
+                />
                 <div className={s.rootTable(this.props.colors)}>
                     <Table
                         bordered
@@ -137,7 +132,7 @@ class TableComp extends Component {
                             pageSize: 20,
 
                         }}
-                        columns={columns}
+                        columns={customColums}
                         summary={(pageData) =>
                             <TableSummary
                                 pageData={pageData}
@@ -146,10 +141,6 @@ class TableComp extends Component {
                             />}
                         dataSource={computedData} />
                 </div>
-                {this.state.sorterArr.map(a => <div>{a.column}</div>)}
-                {/* <div>
-                    <div role="button" onClick={() => { this.setState({ showFilter: true }) }}> click me</div>
-                </div> */}
             </div>
         )
     }

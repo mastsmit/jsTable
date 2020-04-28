@@ -35,29 +35,49 @@ function CustomTableColumnHeader({ title,
                     condition: 'and',
                     textInput: ''
                 }])
-                setShowFilter()
+                // setShowFilter()
                 break;
             }
             case 'sortAscending': {
-                console.log('inSortAscendingCase');
-                const id = uuidv4();
-                setSorterArrProperties([...sorterArr, {
-                    id,
-                    order: 'ascending',
-                    column: dataIndex
-                }])
+                console.log('inSortAscendingCase', sorterArr);
+                let temp = [...sorterArr];
+                console.log('temp', temp);
+                let isColumnFound = false
+                temp = temp.map(obj => {
+                    if (obj['column'] === dataIndex) {
+                        isColumnFound = true;
+                        obj['order'] = 'ascending'
+                    }
+                    return obj;
+                });
+                console.log('isColumnFound', isColumnFound);
+                if (!isColumnFound) {
+                    const id = uuidv4();
+                    temp = [...sorterArr, { id, column: dataIndex, order: 'ascending' }]
+                }
+                console.log('finalTemp', temp);
+                setSorterArrProperties(temp)
                 setShowSorter();
                 break;
             }
             case 'sortDescending':
-                const id = uuidv4();
-                const temp = [...sorterArr, {
-                    id,
-                    order: 'descending',
-                    column: dataIndex
-                }]
-                console.log('tempSorterArr', temp);
+                let temp = [...sorterArr];
+                let isColumnFound = false
+                temp = temp.map(obj => {
+                    if (obj['column'] === dataIndex) {
+                        isColumnFound = true;
+                        obj['order'] = 'descending'
+                    }
+                    return obj;
+                });
+                console.log('isColumnFound', isColumnFound);
+                if (!isColumnFound) {
+                    const id = uuidv4();
+                    temp = [...sorterArr, { id, column: dataIndex, order: 'descending' }]
+                }
+                console.log('finalTemp', temp);
                 setSorterArrProperties(temp)
+                setShowSorter();
                 break;
             default:
                 return
@@ -132,8 +152,8 @@ function CustomTableColumnHeader({ title,
 
     return (
         <React.Fragment>
-            <Dropdown overlay={menu()} trigger={['click']}>
-                <div >{title}</div>
+            <Dropdown overlay={menu()} trigger={['click']} >
+                <div>{title}</div>
             </Dropdown>
         </React.Fragment>
     )

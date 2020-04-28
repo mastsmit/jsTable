@@ -3,6 +3,7 @@ import Model from './components/model'
 import TableComp from './components/Table';
 import { theme } from './consts/themeColors';
 import './App.css';
+import data_large from './largeData.json';
 const darkColors = theme.color.dark;
 const lightColors = theme.color.light;
 const blueTheme = theme.color.blue;
@@ -121,34 +122,34 @@ const data = [
 ]
 const columns = [
   {
-    title: 'Date',
+    titleString: 'Date',
     dataIndex: 'date',
     width: 200,
     columnDataType: 'text',
   },
   {
-    title: 'Amount',
+    titleString: 'Amount',
     dataIndex: 'amount',
     type: 'date',
     columnDataType: 'number',
   },
   {
-    title: 'Column1',
+    titleString: 'Column1',
     dataIndex: 'column1',
     columnDataType: 'text',
   },
   {
-    title: 'Column2',
+    titleString: 'Column2',
     dataIndex: 'column2',
     columnDataType: 'text',
   },
   {
-    title: 'Type',
+    titleString: 'Type',
     dataIndex: 'type',
     columnDataType: 'text',
   },
   {
-    title: 'Note',
+    titleString: 'Note',
     dataIndex: 'note',
     columnDataType: 'text',
   },
@@ -159,7 +160,7 @@ class App extends Component {
     super(props);
     this.model = new Model();
     this.model.store.syncData({
-      data,
+      data: data_large,
       columns
     });
   }

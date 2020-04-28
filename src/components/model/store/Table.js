@@ -12,6 +12,9 @@ class Table {
     syncData(properties) {
         this.data = properties.data;
         this.columns = properties.columns;
+        if (this.columns.length > 0) {
+            this.columns[0].fixed = 'left';
+        }
     }
 
     setTableColumn(columns) {
@@ -23,10 +26,12 @@ class Table {
         this.columns = properties.columns;
     }
     setFilterArrProperties = (filterArr) => {
+        console.log('filterArr', filterArr);
         this.filterArr = filterArr;
     }
 
     setSorterArrProperties = (sorterArr) => {
+        console.log('sorterArr', sorterArr);
         this.sorterArr = sorterArr;
     }
 
@@ -35,6 +40,7 @@ class Table {
     }
 
     resolveFilters(obj, column, filter, text) {
+        console.log('column', column, 'filter', filter, 'text', text);
         switch (filter) {
             case 'contains':
                 if (text === '') return true;
@@ -56,6 +62,24 @@ class Table {
                 return !(obj[column])
             case 'isNotEmpty':
                 return (obj[column])
+            case 'equalTo':
+                if (text === '') return true;
+                return obj[column] ? obj[column] === parseInt(text) : false
+            case 'isNotEqualTo':
+                if (text === '') return true;
+                return obj[column] ? obj[column] !== parseInt(text) : false
+            case 'greaterThan':
+                if (text === '') return true;
+                return obj[column] ? obj[column] > parseInt(text) : false
+            case 'lessThan':
+                if (text === '') return true;
+                return obj[column] ? obj[column] < parseInt(text) : false
+            case 'greaterThanEqualTo':
+                if (text === '') return true;
+                return obj[column] ? obj[column] >= parseInt(text) : false
+            case 'lessThanEqualTo':
+                if (text === '') return true;
+                return obj[column] ? obj[column] <= parseInt(text) : false
             default:
                 return true
         }
@@ -130,15 +154,40 @@ class Table {
                     }
                 })
             case 'isNotEqualTo':
-                return
+                if (text === '') return this.data;
+                return this.data.filter(obj => {
+                    if (obj[column] && obj[column] !== parseInt(text)) {
+                        return obj
+                    }
+                })
             case 'greaterThan':
-                return
+                if (text === '') return this.data;
+                return this.data.filter(obj => {
+                    if (obj[column] && obj[column] > parseInt(text)) {
+                        return obj;
+                    }
+                })
             case 'lessThan':
-                return
+                if (text === '') return this.data;
+                return this.data.filter(obj => {
+                    if (obj[column] && obj[column] < parseInt(text)) {
+                        return obj;
+                    }
+                })
             case 'greaterThanEqualTo':
-                return
+                if (text === '') return this.data;
+                return this.data.filter(obj => {
+                    if (obj[column] && obj[column] >= parseInt(text)) {
+                        return obj;
+                    }
+                })
             case 'lessThanEqualTo':
-                return
+                if (text === '') return this.data;
+                return this.data.filter(obj => {
+                    if (obj[column] && obj[column] <= parseInt(text)) {
+                        return obj;
+                    }
+                })
             default:
                 return this.data
         }
@@ -153,7 +202,7 @@ class Table {
             let toTakeOrNot = false;
             this.filterArr.forEach(property => {
                 const condition = property['condition'] || 'or';
-                const resolvedFilter = this.resolveFilters(obj, property['column'], property['filters'], property['textInput']);
+                const resolvedFilter = this.resolveFilters(obj, property['column'], property['selectedFilter'], property['textInput']);
                 if (condition === 'or') {
                     toTakeOrNot = toTakeOrNot || resolvedFilter;
                 } else {

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Popover, Select, Input, Tooltip } from 'antd';
 import { PlusOutlined, CloseOutlined, DragOutlined } from '@ant-design/icons';
 import { v4 as uuidv4 } from 'uuid';
+import { defaultSelection } from '../../../../../consts/defaultSelection';
 import ReactDragListView from 'react-drag-listview'
 import * as s from './styles';
 
@@ -16,13 +17,20 @@ function FilterAction(props) {
 
 
     const handleChange = (id, type) => (event) => {
-        const tempFilters = [...props.filterArr];
+        let tempFilters = [...props.filterArr];
+        console.log('fdafsadfdas', id, type)
         if (type === 'textInput') {
             tempFilters.find(sortObj => sortObj.id === id)[type] = event.target.value;
+        } else if (type === 'column') {
+            const tempObj = tempFilters.find(sortObj => sortObj.id === id);
+            tempObj[type] = event;
+            console.log('event, ', event, defaultSelection[columnDataType[event]])
+            tempObj.selectedFilter = defaultSelection[columnDataType[event]];
         }
         else {
             tempFilters.find(sortObj => sortObj.id === id)[type] = event;
         }
+
         props.setFilterArrProperties(tempFilters)
         console.log('clicked', id, event);
     }
@@ -31,7 +39,7 @@ function FilterAction(props) {
         props.setFilterArrProperties((props.filterArr.filter(sortObj => sortObj.id !== id)));
     }
 
-    const renderFilter = ({ id, column, filters, condition }, index, conditionValue) => {
+    const renderFilter = ({ id, column, selectedFilter, condition }, index, conditionValue) => {
         const lessThan = "<";
         const lessThanEqualTo = "<=";
 
@@ -52,14 +60,14 @@ function FilterAction(props) {
                     <div className="filter-column-options" style={{ margin: '0px 8px 0px 0px' }}>
                         <Select defaultValue={column} onChange={handleChange(id, 'column')}>
                             {columns.map(col => (
-                                <Option value={col.dataIndex}>{col.title}</Option>
+                                <Option value={col.dataIndex}>{col.titleString}</Option>
                             ))}
                         </Select>
                     </div>
 
                     <div className="filter-options" style={{ margin: '0px 8px 0px 0px' }}>
                         {columnDataType[column] === 'text' &&
-                            <Select defaultValue={filters} onChange={handleChange(id, 'filters')}>
+                            <Select defaultValue="contains" onChange={handleChange(id, 'selectedFilter')}>
                                 <Option value="contains">Contains</Option>
                                 <Option value="is">Is</Option>
                                 <Option value="isNot">Is not</Option>
@@ -70,7 +78,7 @@ function FilterAction(props) {
                         }
                         {
                             columnDataType[column] === 'number' &&
-                            <Select defaultValue={filters} onChange={handleChange(id, 'filters')}>
+                            <Select defaultValue='equalTo' onChange={handleChange(id, 'selectedFilter')}>
                                 <Option value="equalTo"> = </Option>
                                 <Option value="isNotEqualTo"> != </Option>
                                 <Option value="greaterThan"> > </Option>
@@ -95,11 +103,15 @@ function FilterAction(props) {
 
     const handleAddInFilterArr = () => () => {
         const id = uuidv4();
+        let column = ''
+        if (columns.length > 0) {
+            column = columns[0].dataIndex;
+        }
         props.setFilterArrProperties([...props.filterArr,
         {
             id,
-            column: 'column1',
-            filters: 'contains',
+            column,
+            selectedFilter: defaultSelection[columnDataType[column]],
             condition: 'or',
             textInput: ''
         }

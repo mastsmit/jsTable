@@ -37,18 +37,19 @@ function SortAction(props) {
                 </div>
                 <div style={{ margin: '0px 8px 0px 0px ' }}>
                     <Select
+                        value={column}
                         defaultValue={column}
                         onChange={handleChange(id, 'column')}
                     // dropdownStyle={{ backgroundColor: '#3f4447' }}
                     // defaultOpen={true}
                     >
                         {columns.map(col => (
-                            <Option value={col.dataIndex}>{col.title}</Option>
+                            <Option value={col.dataIndex}>{col.titleString}</Option>
                         ))}
                     </Select>
                 </div>
                 <div style={{ margin: '0px 8px 0px 0px ' }}>
-                    <Select defaultValue={order} onChange={handleChange(id, 'order')}>
+                    <Select value={order} defaultValue={order} onChange={handleChange(id, 'order')}>
                         <Option value="ascending">Ascending</Option>
                         <Option value="descending">Descending</Option>
                     </Select>
@@ -98,7 +99,7 @@ function SortAction(props) {
             <div>
                 <div className='sort-overlay-root' style={{ display: 'flex', flexDirection: 'column' }}>
                     <ReactDragListView {...dragProps}>
-                        {props.sorterArr.map((sortObj) => renderSort(sortObj, columns))}
+                        {props.sorterArr.map((sortObj) => renderSort(sortObj))}
                     </ReactDragListView>
                 </div>
                 {getAddSortButton()}
