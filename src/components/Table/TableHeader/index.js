@@ -4,19 +4,43 @@ import { SearchOutlined } from '@ant-design/icons';
 import SortAction from './Actions/SortAction';
 import FilterAction from './Actions/FilterAction';
 import * as s from './styles';
-function TableHeader(props) {
-    const handleChange = (value) => {
-        console.log('value', value);
-    }
-
-    
+function TableHeader({
+    columns,
+    columnDataType,
+    showFilter,
+    setShowFilter,
+    colors,
+    setFilterArrProperties,
+    filterArr,
+    sorterArr,
+    showSorter,
+    setShowSorter,
+    setSorterArrProperties,
+    handleTableSearch }) {
+    const filterArrlength = filterArr.length;
+    const sorterArrLength = sorterArr.length;
     return (
-        <div className={s.rootTableHeader}>
+        <div className={s.rootTableHeader(colors, filterArrlength, sorterArrLength)}>
             <div className="table-header-filter-button">
-                <FilterAction columns={props.columns} columnDataType={props.columnDataType} />
+                <FilterAction
+                    columns={columns}
+                    columnDataType={columnDataType}
+                    showFilter={showFilter}
+                    colors={colors}
+                    setShowFilter={setShowFilter}
+                    setFilterArrProperties={setFilterArrProperties}
+                    filterArr={filterArr}
+                />
             </div>
             <div className="table-header-sort-button">
-                <SortAction handleChange={handleChange} columns={props.columns} handleSorter={props.handleSorter} />
+                <SortAction
+                    columns={columns}
+                    colors={colors}
+                    showSorter={showSorter}
+                    setShowSorter={setShowSorter}
+                    sorterArr={sorterArr}
+                    setSorterArrProperties={setSorterArrProperties}
+                />
             </div>
             <div role="button" className="table-header-search-button">
                 <div className="search-icon"><SearchOutlined /></div>
@@ -24,7 +48,7 @@ function TableHeader(props) {
                     <Input
                         placeholder="type to search"
                         allowClear
-                        onChange={(e) => props.handleSearch(e.target.value)} />
+                        onChange={(e) => handleTableSearch(e.target.value)} />
                 </div>
             </div>
         </div>

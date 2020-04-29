@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Dropdown, Menu } from 'antd';
+import c from 'classnames';
 import { DownOutlined } from '@ant-design/icons';
 import * as s from './styles';
+import { dropDownStyles } from '../Table/styles'
 
 function TableSummary(props) {
     const [menuItemArr, setMenuItemArr] = useState([]);
@@ -21,18 +23,18 @@ function TableSummary(props) {
     }, [])
 
 
-    const getSummaryDropdownItems = ({ dataIndex, summaryValue, columnDataType }) => {
-        switch (columnDataType[dataIndex]) {
+    const getSummaryDropdownItems = ({ dataIndex, summaryValue, columnDataType, colors }) => {
+        switch (columnDataType[dataIndex] ? columnDataType[dataIndex] : 'none') {
             case 'text':
-                return (<Menu selectedKeys={[summaryValue]} onClick={handleClick(dataIndex)} >
+                return (<div className={dropDownStyles(colors)}><Menu selectedKeys={[summaryValue]} onClick={handleClick(dataIndex)} >
                     <Menu.Item key="none">None</Menu.Item>
                     <Menu.Item key="countAll">Count all</Menu.Item>
                     <Menu.Item key="countUniqueValues">Count unique values</Menu.Item>
                     <Menu.Item key="countEmpty">Count empty</Menu.Item>
                     <Menu.Item key="countNotEmpty">Count not empty</Menu.Item>
-                </Menu >)
+                </Menu ></div>)
             case 'number':
-                return (
+                return (<div className={dropDownStyles(colors)}>
                     <Menu selectedKeys={[summaryValue]} onClick={handleClick(dataIndex)} >
                         <Menu.Item key="none">None</Menu.Item>
                         <Menu.Item key="countAll">Count all</Menu.Item>
@@ -44,7 +46,7 @@ function TableSummary(props) {
                         <Menu.Item key="median">Median</Menu.Item>
                         <Menu.Item key="min">Min</Menu.Item>
                         <Menu.Item key="max">Max</Menu.Item>
-                    </Menu >
+                    </Menu ></div>
                 )
             default:
                 return
@@ -145,16 +147,23 @@ function TableSummary(props) {
     }
 
 
-    const renderSummaryDropdown = ({ dataIndex, summaryValue }, pageData, columnDataType) => {
+    const renderSummaryDropdown = ({ dataIndex, summaryValue }, pageData, columnDataType, index, colors) => {
         return (
-            <Dropdown key={dataIndex} trigger="click" overlay={getSummaryDropdownItems({ dataIndex, summaryValue, columnDataType })}>
-                <th className={s.tableSummary}>
+            <Dropdown key={dataIndex} trigger="click" overlay={getSummaryDropdownItems({ dataIndex, summaryValue, columnDataType, colors })} placement="topCenter">
+                <th
+                    className={c(s.tableSummary(props.colors), index === 0 ? "ant-table-cell ant-table-cell-fix-left ant-table-cell-fix-left-last" : 'table-summary')}
+                    style={index === 0 ? { left: '0px' } : {}}
+                >
                     <div className="main-div">
                         <div className="a">
-                            {renderSummaryDetails(dataIndex, summaryValue, pageData)}
-                        </div>
-                        <div className='b'>
-                            {summaryValue === 'none' && <DownOutlined />}
+                            <div style={{ display: 'flex' }}>
+                                <div>
+                                    {renderSummaryDetails(dataIndex, summaryValue, pageData)}
+                                </div>
+                                <div className='b'>
+                                    {summaryValue === 'none' && <DownOutlined />}
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </th>
@@ -165,7 +174,7 @@ function TableSummary(props) {
         <tr>
             {
                 menuItemArr.map((menuItem, index) => (
-                    renderSummaryDropdown(menuItem, props.pageData, props.columnDataType)
+                    renderSummaryDropdown(menuItem, props.pageData, props.columnDataType, index, props.colors)
                 ))
             }
         </tr>

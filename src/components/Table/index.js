@@ -1,43 +1,33 @@
 import React, { Component } from 'react';
-import CustomTableHeader from './CustomTableHeader';
+import { observer } from 'mobx-react';
+import CustomTableColumnHeader from './CustomTableColumnHeader';
 import TableHeader from './TableHeader';
 import TableSummary from '../TableSummary';
 import { Table } from 'antd';
 import * as s from './styles';
-import ReactDragListView from 'react-drag-listview'
-
-const preProcessData = ({ columns, colors }, handleSorter) => {
-    let updatedColumns = []
-    if (columns) {
-        columns[0].fixed = 'left';
-        updatedColumns = columns.map(col => {
-            console.log('col-title', col.title);
-            const title = col.title;
-            col.title = <CustomTableHeader key={col.dataIndex} title={title} colors={colors}/>
-            return col
-        })
-    }
-    console.log('updatedcolumns', updatedColumns);
-    return updatedColumns;
-}
 
 class TableComp extends Component {
     constructor(props) {
         super(props);
-        preProcessData(this.props);
         this.state = {
-            data: this.props.dataSource,
-            columns: this.props.columns,
-            count: 3
+            showFilter: false,
+            showSorter: false,
         };
-
-        const that = this;
+        const { model } = this.props;
+        console.log('model----', model)
+        this.data = model.store.data;
+        this.columns = model.store.columns;
+        this.colors = this.props.colors;
 
         this.columnDataType = {};
 
-        this.props.columns.map(col => (
-            this.columnDataType[col.dataIndex] = col.columnDataType
-        ))
+        if (this.columns.length > 0) {
+            this.columns.map(col => (
+                this.columnDataType[col.dataIndex] = col.columnDataType
+            ))
+        }
+
+
 
         this.dragProps = {
             onDragEnd(fromIndex, toIndex) {
@@ -45,10 +35,10 @@ class TableComp extends Component {
                 if (fromIndex === 0 || toIndex === 0) {
                     return
                 }
-                const columns = that.state.columns;
+                const columns = this.state.columns;
                 const item = columns.splice(fromIndex, 1)[0];
                 columns.splice(toIndex, 0, item);
-                that.setState({
+                this.setState({
                     columns
                 });
             },
@@ -56,34 +46,107 @@ class TableComp extends Component {
         };
     }
 
-    handelSorter = () => {
-        console.log('hi');
+
+
+    renderCustomTableColumnHeader = (col, title) => {
+        const { setFilterArrProperties, setSorterArrProperties, filterArr, sorterArr } = this.props.model.store;
+        return (
+            <CustomTableColumnHeader
+                key={col.dataIndex}
+                title={title}
+                dataIndex={col.dataIndex}
+                colors={this.colors}
+                setShowFilter={this.setShowFilter}
+                columnDataType={this.columnDataType}
+                filterArr={filterArr}
+                setShowSorter={this.setShowSorter}
+                setFilterArrProperties={setFilterArrProperties}
+                setSorterArrProperties={setSorterArrProperties}
+                sorterArr={sorterArr}
+            />
+        )
+    }
+
+    preProcessData = ({ columns }) => {
+        let updatedColumns = JSON.parse(JSON.stringify(columns))
+        if (columns) {
+            updatedColumns.forEach(col => {
+                console.log('col-title', col.title);
+                const title = col.titleString;
+                col.title = this.renderCustomTableColumnHeader(col, title)
+                return col
+            })
+            console.log('came here----smit')
+        }
+        console.log('updatedcolumns', updatedColumns);
+        return updatedColumns;
+    }
+
+
+
+
+
+    setShowFilter = () => {
+        this.setState({ showFilter: !this.state.showFilter })
+    }
+
+    setShowSorter = () => {
+        this.setState({ showSorter: !this.state.showSorter })
+    }
+
+    handleTableSearch = (searchText) => {
+        const { setSearchText } = this.props.model.store;
+        setSearchText(searchText);
     }
 
 
     render() {
-
+        console.log('table-render');
+        const { store } = this.props.model;
+        const { computedData, columns, setSorterArrProperties, setFilterArrProperties, sorterArr, filterArr } = store;
+        const customColums = this.preProcessData(store);
+        console.log('sort arra update', sorterArr)
         return (
-            <div>
-                <TableHeader columns={this.state.columns} handelSorter={this.handelSorter} columnDataType={this.columnDataType} handleSearch={this.props.handleSearch}/>
+            <div >
+                <TableHeader
+                    colors={this.colors}
+                    columns={columns}
+                    handleTableSearch={this.handleTableSearch}
+                    columnDataType={this.columnDataType}
+                    showFilter={this.state.showFilter}
+                    setShowFilter={this.setShowFilter}
+                    showSorter={this.state.showSorter}
+                    setShowSorter={this.setShowSorter}
+                    setFilterArrProperties={setFilterArrProperties}
+                    filterArr={filterArr}
+                    sorterArr={sorterArr}
+                    setSorterArrProperties={setSorterArrProperties}
+                />
                 <div className={s.rootTable(this.props.colors)}>
-                    <ReactDragListView.DragColumn {...this.dragProps}>
-                        <Table
-                            bordered
-                            scroll={{ x: 1300 }}
-                            pagination={{
-                                total: this.state.data.length,
-                                showTotal: total => `total ${total} items`,
-                                responsive: true,
-                            }}
-                            columns={this.state.columns}
-                            summary={(pageData) => <TableSummary pageData={pageData} columnDataType={this.columnDataType} columns={this.state.columns} />}
-                            dataSource={this.state.data} />
-                    </ReactDragListView.DragColumn>
+                    <Table
+                        bordered
+                        scroll={{ x: 1300 }}
+                        pagination={{
+                            total: computedData.length,
+                            showTotal: total => `total ${total} items`,
+                            responsive: true,
+                            defaultPageSize: 10,
+                            pageSizeOptions: ['10', '20', '50', '100', '500', '1000']
+
+                        }}
+                        columns={customColums}
+                        summary={(pageData) =>
+                            <TableSummary
+                                colors={this.colors}
+                                pageData={pageData}
+                                columnDataType={this.columnDataType}
+                                columns={columns}
+                            />}
+                        dataSource={computedData} />
                 </div>
             </div>
         )
     }
 }
 
-export default TableComp;
+export default observer(TableComp);
