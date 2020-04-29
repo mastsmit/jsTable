@@ -21,10 +21,8 @@ function CustomTableColumnHeader({ title,
     setShowSorter }) {
 
     const handleClick = (dataIndex) => (e) => {
-        console.log('clickedThisManyTimes', dataIndex);
         switch (e.key) {
             case 'addFilter': {
-                console.log('inAddFilterCase');
                 const id = uuidv4();
                 setFilterArrProperties([...filterArr, {
                     id,
@@ -37,9 +35,7 @@ function CustomTableColumnHeader({ title,
                 break;
             }
             case 'sortAscending': {
-                console.log('inSortAscendingCase', sorterArr);
                 let temp = [...sorterArr];
-                console.log('temp', temp);
                 let isColumnFound = false
                 temp = temp.map(obj => {
                     if (obj['column'] === dataIndex) {
@@ -48,12 +44,10 @@ function CustomTableColumnHeader({ title,
                     }
                     return obj;
                 });
-                console.log('isColumnFound', isColumnFound);
                 if (!isColumnFound) {
                     const id = uuidv4();
                     temp = [...sorterArr, { id, column: dataIndex, order: 'ascending' }]
                 }
-                console.log('finalTemp', temp);
                 setSorterArrProperties(temp)
                 setShowSorter();
                 break;
@@ -68,12 +62,10 @@ function CustomTableColumnHeader({ title,
                     }
                     return obj;
                 });
-                console.log('isColumnFound', isColumnFound);
                 if (!isColumnFound) {
                     const id = uuidv4();
                     temp = [...sorterArr, { id, column: dataIndex, order: 'descending' }]
                 }
-                console.log('finalTemp', temp);
                 setSorterArrProperties(temp)
                 setShowSorter();
                 break;

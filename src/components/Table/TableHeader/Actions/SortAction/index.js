@@ -16,21 +16,14 @@ function SortAction({
     sorterArr,
     setSorterArrProperties
 }) {
-    const [isPopoverVisible, setIsPopoverVisible] = useState(false);
-
-    const handlePopoverVisibility = () => {
-        setIsPopoverVisible(true);
-    }
 
     const handleChange = (id, type) => (value) => {
         const tempSorters = [...sorterArr];
         tempSorters.find(sortObj => sortObj.id === id)[type] = value;
         setSorterArrProperties(tempSorters);
-        console.log('clicked', id, value);
     }
 
     const handleRemove = (id) => {
-        console.log('id------------', id, sorterArr.filter(sortObj => sortObj.id !== id))
         setSorterArrProperties((sorterArr.filter(sortObj => sortObj.id !== id)));
     }
 
@@ -49,7 +42,7 @@ function SortAction({
                         onChange={handleChange(id, 'column')}
                     >
                         {columns.map(col => (
-                            <Option value={col.dataIndex}>{col.titleString}</Option>
+                            <Option key={col.dataIndex} value={col.dataIndex}>{col.titleString}</Option>
                         ))}
                     </Select>
                 </div>
@@ -93,9 +86,7 @@ function SortAction({
     const getSortPopover = () => {
         const dragProps = {
             onDragEnd(fromIndex, toIndex) {
-                console.log('helloiamhere', fromIndex, toIndex);
                 const tempArr = [...sorterArr]
-                console.log('tempArr', tempArr);
                 const item = sorterArr.splice(fromIndex, 1)[0];
                 sorterArr.splice(toIndex, 0, item);
                 setSorterArrProperties(tempArr);
@@ -103,7 +94,6 @@ function SortAction({
             nodeSelector: '.single-sorter-div',
             handleSelector: '.drag-outlined-icon'
         };
-        console.log('addSort', sorterArr);
         return (
             <div>
                 <div className='sort-overlay-root' style={{ display: 'flex', flexDirection: 'column' }}>
@@ -117,7 +107,7 @@ function SortAction({
     }
     return (
         <React.Fragment>
-            <Popover overlayClassName={s.popOverstyle(colors)} onVisibleChange={(e) => setShowSorter(e)} visible={showSorter} trigger="click" placement="bottom" content={getSortPopover()}>
+            <Popover key="sort-action-popover" overlayClassName={s.popOverstyle(colors)} onVisibleChange={(e) => setShowSorter(e)} visible={showSorter} trigger="click" placement="bottom" content={getSortPopover()}>
                 <div role="button" className="table-header-sort-button-text" onClick={() => { setShowSorter() }} >
                     Sort
                     </div>

@@ -26,12 +26,10 @@ class Table {
         this.columns = properties.columns;
     }
     setFilterArrProperties = (filterArr) => {
-        console.log('filterArr', filterArr);
         this.filterArr = filterArr;
     }
 
     setSorterArrProperties = (sorterArr) => {
-        console.log('sorterArr', sorterArr);
         this.sorterArr = sorterArr;
     }
 
@@ -116,7 +114,6 @@ class Table {
     }
 
     get sortedData() {
-        console.log('called sorted data function----')
         const compare = (a, b) => {
             let compareResult = -1;
             let breakCompare = false;
@@ -160,7 +157,6 @@ class Table {
             }
             return JSON.stringify(tempArr).includes(this.searchText);
         });
-        console.log('vdafdafdsa', searchedData)
         return searchedData
     }
 

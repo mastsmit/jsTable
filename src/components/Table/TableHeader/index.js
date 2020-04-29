@@ -1,5 +1,5 @@
 import React from 'react';
-import { Input, Popover } from 'antd';
+import { Input } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
 import debounce from 'lodash/debounce';
 import SortAction from './Actions/SortAction';

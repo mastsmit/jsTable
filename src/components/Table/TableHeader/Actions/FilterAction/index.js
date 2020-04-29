@@ -16,22 +16,14 @@ function FilterAction({
     colors,
     setFilterArrProperties,
 }) {
-    // console.log('propspropsprops', props);
-    // console.log('filterfilter', showFilter);
-    // console.log('columnDataType', columnDataType);
-
-    let length = filterArr.length;
 
     const handleChange = (id, type) => (event) => {
-        console.log('evetb======', event)
         let tempFilters = [...filterArr];
-        console.log('fdafsadfdas', id, type)
         if (type === 'textInput') {
             tempFilters.find(filterObj => filterObj.id === id)[type] = event;
         } else if (type === 'column') {
             const tempObj = tempFilters.find(filterObj => filterObj.id === id);
             tempObj[type] = event;
-            console.log('event, ', event, defaultSelection[columnDataType[event]])
             tempObj.selectedFilter = defaultSelection[columnDataType[event]];
         }
         else {
@@ -39,7 +31,6 @@ function FilterAction({
         }
 
         setFilterArrProperties(tempFilters)
-        console.log('clicked', id, event);
     }
 
     const handleRemove = (id) => {
@@ -68,7 +59,7 @@ function FilterAction({
                     <div className="filter-column-options">
                         <Select dropdownClassName={s.style1(colors)} defaultValue={column} onChange={handleChange(id, 'column')}>
                             {columns.map(col => (
-                                <Option value={col.dataIndex}>{col.titleString}</Option>
+                                <Option key={col.dataIndex} value={col.dataIndex}>{col.titleString}</Option>
                             ))}
                         </Select>
                     </div>
@@ -142,7 +133,6 @@ function FilterAction({
     const getFilterPopover = () => {
         const dragProps = {
             onDragEnd(fromIndex, toIndex) {
-                console.log('helloiamhere', fromIndex, toIndex);
                 const item = filterArr.splice(fromIndex, 1);
                 filterArr.splice(toIndex, 0, item);
                 setFilterArrProperties(filterArr);
@@ -166,7 +156,7 @@ function FilterAction({
     }
     return (
         <div>
-            <Popover overlayClassName={s.popOverstyle(colors)} onVisibleChange={(e) => { setShowFilter(e) }} visible={showFilter} trigger="click" placement="bottom" content={getFilterPopover()} overlayStyle={{ overflow: 'hidden auto', maxHeight: '250px' }}>
+            <Popover key="filter-action-popover" overlayClassName={s.popOverstyle(colors)} onVisibleChange={(e) => { setShowFilter(e) }} visible={showFilter} trigger="click" placement="bottom" content={getFilterPopover()} overlayStyle={{ overflow: 'hidden auto', maxHeight: '250px' }}>
                 <div role="button" className="table-header-filter-button-text" onClick={() => { setShowFilter() }}>
                     Filter
                 </div>

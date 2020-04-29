@@ -8,7 +8,6 @@ import { dropDownStyles } from '../Table/styles'
 function TableSummary(props) {
     const [menuItemArr, setMenuItemArr] = useState([]);
     const handleClick = (dataIndex) => (value) => {
-        console.log('col', 'e', value);
         menuItemArr.find(item => item.dataIndex === dataIndex).summaryValue = value.key;
         setMenuItemArr([...menuItemArr])
     }
@@ -110,7 +109,6 @@ function TableSummary(props) {
                 })
                 sortedArr = arr.sort();
                 lengthOfArr = sortedArr.length;
-                console.log('sortedarr', sortedArr);
                 if (lengthOfArr % 2 === 0) return `MEDIAN ${(sortedArr[(lengthOfArr / 2)] + sortedArr[lengthOfArr / 2 - 1]) / 2}`
                 else return `MEDIAN ${sortedArr[(lengthOfArr + 1) / 2]}`
             case 'min':

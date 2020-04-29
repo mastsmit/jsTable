@@ -14,7 +14,6 @@ class TableComp extends Component {
             showSorter: false,
         };
         const { model } = this.props;
-        console.log('model----', model)
         this.data = model.store.data;
         this.columns = model.store.columns;
         this.colors = this.props.colors;
@@ -31,7 +30,6 @@ class TableComp extends Component {
 
         this.dragProps = {
             onDragEnd(fromIndex, toIndex) {
-                console.log('from inde, tounde', fromIndex, toIndex)
                 if (fromIndex === 0 || toIndex === 0) {
                     return
                 }
@@ -71,14 +69,11 @@ class TableComp extends Component {
         let updatedColumns = JSON.parse(JSON.stringify(columns))
         if (columns) {
             updatedColumns.forEach(col => {
-                console.log('col-title', col.title);
                 const title = col.titleString;
                 col.title = this.renderCustomTableColumnHeader(col, title)
                 return col
             })
-            console.log('came here----smit')
         }
-        console.log('updatedcolumns', updatedColumns);
         return updatedColumns;
     }
 
@@ -101,11 +96,9 @@ class TableComp extends Component {
 
 
     render() {
-        console.log('table-render');
         const { store } = this.props.model;
         const { computedData, columns, setSorterArrProperties, setFilterArrProperties, sorterArr, filterArr } = store;
         const customColums = this.preProcessData(store);
-        console.log('sort arra update', sorterArr)
         return (
             <div >
                 <TableHeader
