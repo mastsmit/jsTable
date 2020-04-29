@@ -111,7 +111,7 @@ function App() {
     <div>
       {darkColors?
     <div className="App">
-      <TableComp colors={darkColors} dataSource={tableData} columns={columns}/>
+      <TableComp colors={darkColors} dataSource={data} columns={columns}/>
      
     </div>:
      <TableComp colors={lightColors} dataSource={data} columns={columns} />
