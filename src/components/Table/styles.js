@@ -81,3 +81,9 @@ export const dropDownStyles = (colors) => css`
 }
 
 `;
+
+
+export const lineClassName = () => css`
+display: none !important;
+
+`

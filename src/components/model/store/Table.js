@@ -17,14 +17,14 @@ class Table {
         }
     }
 
-    setTableColumn(columns) {
-        this.columns = columns;
+    setTableColumn(store, columns) {
+        store.columns = columns;
     }
 
-    setSo(properties) {
-        this.data = properties.data;
-        this.columns = properties.columns;
+    setData(store, data) {
+        store.data = data;
     }
+
     setFilterArrProperties = (filterArr) => {
         this.filterArr = filterArr;
     }
@@ -169,6 +169,7 @@ decorate(Table, {
     columns: observable,
     sorterArr: observable,
     filterArr: observable,
+    setTableColumn: action,
     setSorterArrProperties: action,
     syncData: action,
     setFilterArrProperties: action,
@@ -176,6 +177,7 @@ decorate(Table, {
     sortedData: computed,
     filteredData: computed,
     setSearchText: action,
+    setData: action,
     searchText: observable
 })
 export default Table;

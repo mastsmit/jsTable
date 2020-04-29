@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import debounce from 'lodash/debounce';
 import { Popover, Select, Input, Tooltip } from 'antd';
+import c from 'classnames';
 import { PlusOutlined, CloseOutlined, DragOutlined } from '@ant-design/icons';
 import { v4 as uuidv4 } from 'uuid';
 import { defaultSelection } from '../../../../../consts/defaultSelection';
@@ -37,27 +38,27 @@ function FilterAction({
         setFilterArrProperties((filterArr.filter(filterObj => filterObj.id !== id)));
     }
 
-    const renderFilter = ({ id, column, selectedFilter, condition }, index, conditionValue) => {
+    const renderFilter = ({ id, column, selectedFilter, condition, textInput }, index, conditionValue) => {
         const lessThan = "<";
         const lessThanEqualTo = "<=";
         const handleInputChangeDebounce = debounce(handleChange(id, 'textInput'), 300);
 
         return (
-            <div className={s.headerDropdown(colors)} id={id}>
+            <div className={c('single-filter-div-wrapper', s.headerDropdown(colors))} id={id}>
                 <div className='drag-outlined-icon'>
                     <DragOutlined />
                 </div>
                 <div className='single-filter-wrapper'>
                     {(index !== 0) &&
                         <div className='filter-boolean-condition'>
-                            <Select dropdownClassName={s.style1(colors)} defaultValue={condition} disabled={index > 1} onChange={handleChange(id, 'condition')} value={conditionValue}>
+                            <Select dropdownClassName={s.style1(colors)} value={condition} defaultValue={condition} disabled={index > 1} onChange={handleChange(id, 'condition')} value={conditionValue}>
                                 <Option value="and">And</Option>
                                 <Option value="or">Or</Option>
                             </Select>
                         </div>
                     }
                     <div className="filter-column-options">
-                        <Select dropdownClassName={s.style1(colors)} defaultValue={column} onChange={handleChange(id, 'column')}>
+                        <Select dropdownClassName={s.style1(colors)} value={column} defaultValue={column} onChange={handleChange(id, 'column')}>
                             {columns.map(col => (
                                 <Option key={col.dataIndex} value={col.dataIndex}>{col.titleString}</Option>
                             ))}
@@ -66,7 +67,7 @@ function FilterAction({
 
                     <div className="filter-options">
                         {columnDataType[column] === 'text' &&
-                            <Select dropdownClassName={s.style1(colors)} defaultValue="contains" onChange={handleChange(id, 'selectedFilter')}>
+                            <Select dropdownClassName={s.style1(colors)} value={selectedFilter} defaultValue="contains" onChange={handleChange(id, 'selectedFilter')}>
                                 <Option value="contains">Contains</Option>
                                 <Option value="is">Is</Option>
                                 <Option value="isNot">Is not</Option>
@@ -77,7 +78,7 @@ function FilterAction({
                         }
                         {
                             columnDataType[column] === 'number' &&
-                            <Select dropdownClassName={s.style1(colors)} defaultValue='equalTo' onChange={handleChange(id, 'selectedFilter')}>
+                            <Select dropdownClassName={s.style1(colors)} value={selectedFilter} defaultValue='equalTo' onChange={handleChange(id, 'selectedFilter')}>
                                 <Option value="equalTo"> = </Option>
                                 <Option value="isNotEqualTo"> != </Option>
                                 <Option value="greaterThan"> > </Option>
@@ -88,7 +89,7 @@ function FilterAction({
                         }
                     </div>
                     <div className="filter-text-input">
-                        <Input id={id} placeholder="value" onChange={(e) => {
+                        <Input value={textInput} id={id} placeholder="value" onChange={(e) => {
                             const input = e.target.value;
                             handleInputChangeDebounce(input)
                         }} />
@@ -133,11 +134,13 @@ function FilterAction({
     const getFilterPopover = () => {
         const dragProps = {
             onDragEnd(fromIndex, toIndex) {
-                const item = filterArr.splice(fromIndex, 1);
-                filterArr.splice(toIndex, 0, item);
-                setFilterArrProperties(filterArr);
+                const temp = [...filterArr]
+                const item = temp.splice(fromIndex, 1)[0];
+                temp.splice(toIndex, 0, item);
+                console.log('filterArr', temp);
+                setFilterArrProperties(temp);
             },
-            nodeSelector: '.single-filter-div',
+            nodeSelector: '.single-filter-div-wrapper',
             handleSelector: '.drag-outlined-icon'
         };
         let conditionValue = null;

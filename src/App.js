@@ -159,7 +159,7 @@ class App extends Component {
     super(props);
     this.model = new Model();
     this.model.store.syncData({
-      data: data_large,
+      data,
       columns
     });
   }
@@ -167,7 +167,7 @@ class App extends Component {
     return (
       <div className="App" >
         <TableComp colors={darkColors} model={this.model} />
-        < TableComp model={this.model} colors={lightColors} />
+        <TableComp model={this.model} colors={lightColors} />
       </div>
     );
   }

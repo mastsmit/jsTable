@@ -3,16 +3,19 @@ import { observer } from 'mobx-react';
 import CustomTableColumnHeader from './CustomTableColumnHeader';
 import TableHeader from './TableHeader';
 import TableSummary from '../TableSummary';
-import { Table } from 'antd';
+import ReactDragListView from 'react-drag-listview';
+import { Table, Modal } from 'antd';
 import * as s from './styles';
-import { computed } from 'mobx';
 
+const { confirm } = Modal;
 class TableComp extends Component {
     constructor(props) {
         super(props);
         this.state = {
             showFilter: false,
             showSorter: false,
+            currentPageNumber: 1,
+            currentPageSize: 10
         };
         const { model } = this.props;
         this.columns = model.store.columns;
@@ -25,26 +28,7 @@ class TableComp extends Component {
                 this.columnDataType[col.dataIndex] = col.columnDataType
             ))
         }
-
-
-
-        this.dragProps = {
-            onDragEnd(fromIndex, toIndex) {
-                if (fromIndex === 0 || toIndex === 0) {
-                    return
-                }
-                const columns = this.state.columns;
-                const item = columns.splice(fromIndex, 1)[0];
-                columns.splice(toIndex, 0, item);
-                this.setState({
-                    columns
-                });
-            },
-            nodeSelector: "th",
-        };
     }
-
-
 
     renderCustomTableColumnHeader = (col, title) => {
         const { setFilterArrProperties, setSorterArrProperties, filterArr, sorterArr } = this.props.model.store;
@@ -79,7 +63,17 @@ class TableComp extends Component {
 
 
 
-
+    showConfirmationModal = (setSorterArrProperties) => {
+        confirm({
+            title: 'Would you like to remove sorting',
+            okText: 'Remove',
+            okType: 'danger',
+            cancelText: 'Cancel',
+            onOk() {
+                setSorterArrProperties([]);
+            },
+        })
+    }
 
     setShowFilter = () => {
         this.setState({ showFilter: !this.state.showFilter })
@@ -97,8 +91,51 @@ class TableComp extends Component {
 
     render() {
         const { store } = this.props.model;
-        const { computedData, columns, setSorterArrProperties, setFilterArrProperties, sorterArr, filterArr } = store;
-        const customColums = this.preProcessData(store);
+        const { setData, data, computedData, setTableColumn, columns, setSorterArrProperties, setFilterArrProperties, sorterArr, filterArr } = store;
+        const customColumns = this.preProcessData(store);
+        const columnDragProps = {
+            onDragEnd: (fromIndex, toIndex) => {
+                if (fromIndex === 0 || toIndex === 0) {
+                    return
+                }
+                const tempColumns = columns;
+                const item = tempColumns.splice(fromIndex, 1)[0];
+                tempColumns.splice(toIndex, 0, item);
+                setTableColumn(store, tempColumns);
+            },
+            nodeSelector: "th.ant-table-cell",
+        };
+
+        const rowDragProps = {
+            onDragEnd: (fromIndex, toIndex) => {
+                if (sorterArr.length > 0) {
+                    this.showConfirmationModal(setSorterArrProperties);
+                    return;
+                }
+                const offset = (this.state.currentPageNumber - 1) * this.state.currentPageSize;
+                const fromObject = computedData[offset + fromIndex - 1];
+                const toObject = computedData[offset + toIndex - 1];
+
+                let fromObjectIndex = 0;
+                let toObjectIndex = 0;
+
+
+                data.forEach((obj, index) => {
+                    if (obj.key === fromObject.key) {
+                        fromObjectIndex = index;
+                    } else if (obj.key === toObject.key) {
+                        toObjectIndex = index;
+                    }
+                });
+                console.log('fromObj', fromObject, toObject, fromObjectIndex, toObjectIndex, fromIndex, toIndex)
+                const tempData = data;
+                const item = tempData.splice(fromObjectIndex, 1)[0];
+                tempData.splice(toObjectIndex, 0, item);
+                setData(store, tempData);
+            },
+            nodeSelector: "tr.ant-table-row",
+        };
+
         return (
             <div >
                 <TableHeader
@@ -116,28 +153,35 @@ class TableComp extends Component {
                     setSorterArrProperties={setSorterArrProperties}
                 />
                 <div className={s.rootTable(this.props.colors)}>
-                    <Table
-                        bordered
-                        scroll={{ x: 1300 }}
-                        pagination={{
-                            total: computedData.length,
-                            showTotal: total => `total ${total} items`,
-                            responsive: true,
-                            defaultPageSize: 10,
-                            pageSizeOptions: ['10', '20', '50', '100', '500', '1000']
-
-                        }}
-                        columns={customColums}
-                        summary={() =>
-                            <TableSummary
-                                colors={this.colors}
-                                pageData={computedData}
-                                columnDataType={this.columnDataType}
-                                columns={columns}
-                            />}
-                        dataSource={computedData} />
+                    <ReactDragListView {...rowDragProps} lineClassName={s.lineClassName()}>
+                        <ReactDragListView.DragColumn {...columnDragProps} lineClassName={s.lineClassName()}>
+                            <Table
+                                bordered
+                                scroll={{ x: 1300 }}
+                                pagination={{
+                                    current: this.state.currentPageNumber,
+                                    total: computedData.length,
+                                    showTotal: total => `total ${total} items`,
+                                    responsive: true,
+                                    pageSize: this.state.currentPageSize,
+                                    onChange: (page) => this.setState({ currentPageNumber: page }),
+                                    onShowSizeChange: (page, pageSize) => this.setState({ currentPageSize: pageSize }),
+                                    showSizeChanger: true,
+                                    pageSizeOptions: [10, 20, 50, 100, 500, 1000]
+                                }}
+                                columns={customColumns}
+                                summary={() =>
+                                    <TableSummary
+                                        colors={this.colors}
+                                        pageData={computedData}
+                                        columnDataType={this.columnDataType}
+                                        columns={columns}
+                                    />}
+                                dataSource={computedData} />
+                        </ReactDragListView.DragColumn>
+                    </ReactDragListView>
                 </div>
-            </div>
+            </div >
         )
     }
 }

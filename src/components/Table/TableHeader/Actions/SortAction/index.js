@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Popover, Select, Tooltip } from 'antd';
 import { v4 as uuidv4 } from 'uuid';
+import c from 'classnames';
 import { PlusOutlined, CloseOutlined, DragOutlined } from '@ant-design/icons';
 import ReactDragListView from 'react-drag-listview'
 import * as s from '../../styles';
@@ -30,7 +31,7 @@ function SortAction({
     const renderSort = ({ id, column, order }) => {
 
         return (
-            <div className={s.headerDropdown(colors)} id={id}>
+            <div className={c('single-sorter-div-wrapper', s.headerDropdown(colors))} id={id}>
                 <div className="drag-outlined-icon" style={{ marginRight: '8px' }}>
                     <DragOutlined />
                 </div>
@@ -86,12 +87,13 @@ function SortAction({
     const getSortPopover = () => {
         const dragProps = {
             onDragEnd(fromIndex, toIndex) {
-                const tempArr = [...sorterArr]
-                const item = sorterArr.splice(fromIndex, 1)[0];
-                sorterArr.splice(toIndex, 0, item);
-                setSorterArrProperties(tempArr);
+                const temp = [...sorterArr]
+                const item = temp.splice(fromIndex, 1)[0];
+                temp.splice(toIndex, 0, item);
+                console.log('sorterARr', temp);
+                setSorterArrProperties(temp);
             },
-            nodeSelector: '.single-sorter-div',
+            nodeSelector: '.single-sorter-div-wrapper',
             handleSelector: '.drag-outlined-icon'
         };
         return (
