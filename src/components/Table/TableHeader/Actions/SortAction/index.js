@@ -3,6 +3,7 @@ import { Popover, Select, Tooltip } from 'antd';
 import { v4 as uuidv4 } from 'uuid';
 import { PlusOutlined, CloseOutlined, DragOutlined } from '@ant-design/icons';
 import ReactDragListView from 'react-drag-listview'
+import * as s from '../../styles';
 
 
 const { Option } = Select;
@@ -30,11 +31,11 @@ function SortAction(props) {
 
         return (
 
-            <div className="single-sorter-div" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', margin: '3px' }} id={id}>
-                <div className="drag-outlined-icon" style={{ margin: '0px 8px 0px 0px' }}>
+            <div className="single-sorter-div" className={s.singlesorterDiv}  id={id}>
+                <div className="drag-outlined-icon">
                     <DragOutlined />
                 </div>
-                <div style={{ margin: '0px 8px 0px 0px ' }}>
+                <div >
                     <Select
                         defaultValue={column}
                         onChange={handleChange(id, 'column')}
@@ -46,7 +47,7 @@ function SortAction(props) {
                         ))}
                     </Select>
                 </div>
-                <div style={{ margin: '0px 8px 0px 0px ' }}>
+                <div>
                     <Select defaultValue={order} onChange={handleChange(id, 'order')}>
                         <Option value="ascending">Ascending</Option>
                         <Option value="descending">Descending</Option>
@@ -104,7 +105,7 @@ function SortAction(props) {
     }
     return (
         <React.Fragment>
-            <Popover trigger="click" placement="bottom" content={getSortPopover()}>
+            <Popover overlayClassName={s.popOverstyle} trigger="click" placement="bottom" content={getSortPopover()}>
                 <div onClick={handlePopoverVisibility} role="button" className="table-header-sort-button-text">
                     Sort
                     </div>

@@ -25,7 +25,7 @@ export const rootTable = (colors) => css`
         border-bottom: 1px solid grey;
         border-top: 1px solid grey;
         :hover{
-            background-color:grey !important;
+            background-color:#474c50 !important;
         }
     }
         .ant-table-thead{
@@ -38,9 +38,6 @@ export const rootTable = (colors) => css`
 
 .ant-table-tbody > tr > td{
     border-bottom: 1px solid grey;
-    :hover{
-        background-color:grey !important;
-    }
 }
     .ant-table-tbody{
         .ant-table-cell{
@@ -54,17 +51,23 @@ export const rootTable = (colors) => css`
 
 export const dropDownStyles = (colors) => css`
   width:200px !important;
+  
   .ant-menu-item{
     background-color: ${colors.popUpColor} !important;
       color: silver !important;
       margin: 0px;
       padding: 0px;
   }
-  .ant-menu-vertical .ant-menu-item{
+  .ant-menu-vertical {
+    border-right: none !important;
+    
+    .ant-menu-item{
     margin-top: 0px;
     margin-bottom: 0px;
     :hover{
-        background: transperant  !important;
+        background: #474c50 !important;
     }
   }
+}
+
 `;

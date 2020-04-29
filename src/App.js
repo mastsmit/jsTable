@@ -106,21 +106,12 @@ function App() {
   ]
 
 
-  const [tableData, setTableData] = useState(data);
-
-  const handleSearch=(searchText)=>{
-        let searchData = data.filter(temp =>{
-          //   console.log(temp.amount,"u----------")
-         return temp.amount.includes(searchText);
-          })
-          setTableData(searchData);
-  }
 
   return (
     <div>
       {darkColors?
     <div className="App">
-      <TableComp colors={darkColors} dataSource={tableData} columns={columns} handleSearch={handleSearch}/>
+      <TableComp colors={darkColors} dataSource={tableData} columns={columns}/>
      
     </div>:
      <TableComp colors={lightColors} dataSource={data} columns={columns} />

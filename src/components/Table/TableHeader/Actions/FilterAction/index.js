@@ -3,7 +3,7 @@ import { Popover, Select, Input, Tooltip } from 'antd';
 import { v4 as uuidv4 } from 'uuid';
 import { PlusOutlined, CloseOutlined, DragOutlined } from '@ant-design/icons';
 import ReactDragListView from 'react-drag-listview'
-
+import * as s from '../../styles';
 const { Option } = Select;
 
 function FilterAction(props) {
@@ -31,29 +31,29 @@ function FilterAction(props) {
         const lessThan = "<";
         const lessThanEqualTo = "<=";
         return (
-            <div className="single-filter-div" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', margin: '3px' }} id={id}>
-                <div className='drag-outlined-icon' style={{ cursor: 'pointer', margin: '0px 8px 0px 0px' }}>
+            <div className={s.singleFilterDiv}  id={id}>
+                <div className='drag-outlined-icon'>
                     <DragOutlined />
                 </div>
                 {index !== 0 &&
-                    <div className='filter-boolean-condition' style={{ margin: '0px 8px 0px 0px ' }}>
-                        <Select defaultValue={condition} onChange={handleChange(id, 'condition')}>
+                    <div className='filter-boolean-condition'>
+                        <Select dropdownClassName={s.style1} defaultValue={condition} onChange={handleChange(id, 'condition')}>
                             <Option value="and">And</Option>
                             <Option value="or">Or</Option>
                         </Select>
                     </div>
                 }
-                <div className="filter-column-options" style={{ margin: '0px 8px 0px 0px' }}>
-                    <Select defaultValue={column} onChange={handleChange(id, 'column')}>
+                <div className="filter-column-options">
+                    <Select dropdownClassName={s.style1} defaultValue={column} onChange={handleChange(id, 'column')}>
                         {columns.map(col => (
                             <Option value={col.dataIndex}>{col.title}</Option>
                         ))}
                     </Select>
                 </div>
 
-                <div className="filter-options" style={{ margin: '0px 8px 0px 0px' }}>
+                <div>
                     {columnDataType[column] === 'text' &&
-                        <Select defaultValue={filters} onChange={handleChange(id, 'filters')}>
+                        <Select dropdownClassName={s.style1} defaultValue={filters}  onChange={handleChange(id, 'filters')}>
                             <Option value="contains">Contains</Option>
                             <Option value="is">Is</Option>
                             <Option value="isNot">Is not</Option>
@@ -64,7 +64,7 @@ function FilterAction(props) {
                     }
                     {
                         columnDataType[column] === 'number' &&
-                        <Select defaultValue={filters} onChange={handleChange(id, 'filters')}>
+                        <Select  dropdownClassName={s.style1} defaultValue={filters}  onChange={handleChange(id, 'filters')}>
                             <Option value="equalTo"> = </Option>
                             <Option value="isNotEqualTo"> != </Option>
                             <Option value="greaterThan"> > </Option>
@@ -131,7 +131,7 @@ function FilterAction(props) {
     }
     return (
         <React.Fragment>
-            <Popover trigger="click" placement="bottom" content={getFilterPopover()}>
+            <Popover overlayClassName={s.popOverstyle} trigger="click" placement="bottom" content={getFilterPopover()}>
                 <div role="button" className="table-header-sort-button-text">
                     Filter
                 </div>
