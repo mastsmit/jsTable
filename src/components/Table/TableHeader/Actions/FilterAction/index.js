@@ -8,35 +8,40 @@ import * as s from './styles';
 
 const { Option } = Select;
 
-function FilterAction(props) {
-    const columns = props.columns;
-    const columnDataType = props.columnDataType;
-    console.log('propspropsprops', props);
-    console.log('filterfilter', props.showFilter);
-    console.log('columnDataType', columnDataType);
+function FilterAction({
+    columns,
+    columnDataType,
+    filterArr,
+    showFilter,
+    setShowFilter,
+    setFilterArrProperties,
+}) {
+    // console.log('propspropsprops', props);
+    // console.log('filterfilter', showFilter);
+    // console.log('columnDataType', columnDataType);
 
 
     const handleChange = (id, type) => (event) => {
-        let tempFilters = [...props.filterArr];
+        let tempFilters = [...filterArr];
         console.log('fdafsadfdas', id, type)
         if (type === 'textInput') {
-            tempFilters.find(sortObj => sortObj.id === id)[type] = event.target.value;
+            tempFilters.find(filterObj => filterObj.id === id)[type] = event.target.value;
         } else if (type === 'column') {
-            const tempObj = tempFilters.find(sortObj => sortObj.id === id);
+            const tempObj = tempFilters.find(filterObj => filterObj.id === id);
             tempObj[type] = event;
             console.log('event, ', event, defaultSelection[columnDataType[event]])
             tempObj.selectedFilter = defaultSelection[columnDataType[event]];
         }
         else {
-            tempFilters.find(sortObj => sortObj.id === id)[type] = event;
+            tempFilters.find(filterObj => filterObj.id === id)[type] = event;
         }
 
-        props.setFilterArrProperties(tempFilters)
+        setFilterArrProperties(tempFilters)
         console.log('clicked', id, event);
     }
 
     const handleRemove = (id) => {
-        props.setFilterArrProperties((props.filterArr.filter(sortObj => sortObj.id !== id)));
+        setFilterArrProperties((filterArr.filter(filterObj => filterObj.id !== id)));
     }
 
     const renderFilter = ({ id, column, selectedFilter, condition }, index, conditionValue) => {
@@ -107,7 +112,7 @@ function FilterAction(props) {
         if (columns.length > 0) {
             column = columns[0].dataIndex;
         }
-        props.setFilterArrProperties([...props.filterArr,
+        setFilterArrProperties([...filterArr,
         {
             id,
             column,
@@ -132,21 +137,21 @@ function FilterAction(props) {
         const dragProps = {
             onDragEnd(fromIndex, toIndex) {
                 console.log('helloiamhere', fromIndex, toIndex);
-                const item = props.filterArr.splice(fromIndex, 1);
-                props.filterArr.splice(toIndex, 0, item);
-                props.setFilterArrProperties(props.filterArr);
+                const item = filterArr.splice(fromIndex, 1);
+                filterArr.splice(toIndex, 0, item);
+                setFilterArrProperties(filterArr);
             },
             nodeSelector: '.single-filter-div',
             handleSelector: '.drag-outlined-icon'
         };
         let conditionValue = null;
-        if (props.filterArr.length === 1) conditionValue = props.filterArr[0]['condition']
-        if (props.filterArr.length > 1) conditionValue = props.filterArr[1]['condition']
+        if (filterArr.length === 1) conditionValue = filterArr[0]['condition']
+        if (filterArr.length > 1) conditionValue = filterArr[1]['condition']
         return (
             <div key="43">
-                <div className='sort-overlay-root' style={{ display: 'flex', flexDirection: 'column' }}>
+                <div className='filter-overlay-root' style={{ display: 'flex', flexDirection: 'column' }}>
                     <ReactDragListView {...dragProps}>
-                        {props.filterArr.map((filterObj, index) => renderFilter(filterObj, index, conditionValue))}
+                        {filterArr.map((filterObj, index) => renderFilter(filterObj, index, conditionValue))}
                     </ReactDragListView>
                 </div>
                 {getAddFilterButton()}
@@ -156,8 +161,8 @@ function FilterAction(props) {
     return (
         <div className={s.filterRoot}>
 
-            <Popover visible={props.showFilter} trigger="click" placement="bottom" content={getFilterPopover()} overlayStyle={{ overflow: 'hidden auto', maxHeight: '250px' }}>
-                <div role="button" className="table-header-sort-button-text" onClick={() => props.setShowFilter()}>
+            <Popover visible={showFilter} trigger="click" placement="bottom" content={getFilterPopover()} overlayStyle={{ overflow: 'hidden auto', maxHeight: '250px' }}>
+                <div role="button" className="table-header-filter-button-text" onClick={() => setShowFilter()}>
                     Filter
                 </div>
             </Popover>

@@ -4,28 +4,37 @@ import { SearchOutlined } from '@ant-design/icons';
 import SortAction from './Actions/SortAction';
 import FilterAction from './Actions/FilterAction';
 import * as s from './styles';
-function TableHeader(props) {
+function TableHeader({
+    columns,
+    columnDataType,
+    showFilter,
+    setShowFilter,
+    setFilterArrProperties,
+    filterArr,
+    sorterArr,
+    showSorter,
+    setShowSorter,
+    setSorterArrProperties,
+    handleTableSearch}) {
     return (
         <div className={s.rootTableHeader}>
             <div className="table-header-filter-button">
                 <FilterAction
-                    columns={props.columns}
-                    columnDataType={props.columnDataType}
-                    showFilter={props.showFilter}
-                    setShowFilter={props.setShowFilter}
-                    setFilterArrProperties={props.setFilterArrProperties}
-                    filterArr={props.filterArr}
-                    handleChangeInFilterArr={props.handleChangeInFilterArr}
-                    handleAddInFilterArr={props.handleAddInFilterArr} />
+                    columns={columns}
+                    columnDataType={columnDataType}
+                    showFilter={showFilter}
+                    setShowFilter={setShowFilter}
+                    setFilterArrProperties={setFilterArrProperties}
+                    filterArr={filterArr}
+                    />
             </div>
             <div className="table-header-sort-button">
                 <SortAction
-                    columns={props.columns}
-                    handleSorter={props.handleSorter}
-                    showSorter={props.showSorter}
-                    setShowSorter={props.setShowSorter}
-                    sorterArr={props.sorterArr}
-                    setSorterArrProperties={props.setSorterArrProperties}
+                    columns={columns}
+                    showSorter={showSorter}
+                    setShowSorter={setShowSorter}
+                    sorterArr={sorterArr}
+                    setSorterArrProperties={setSorterArrProperties}
                 />
             </div>
             <div role="button" className="table-header-search-button">
@@ -34,7 +43,7 @@ function TableHeader(props) {
                     <Input
                         placeholder="type to search"
                         allowClear
-                        onChange={(e) => props.handleTableSearch(e.target.value)} />
+                        onChange={(e) => handleTableSearch(e.target.value)} />
                 </div>
             </div>
         </div>

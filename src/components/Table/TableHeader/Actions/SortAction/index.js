@@ -7,24 +7,29 @@ import ReactDragListView from 'react-drag-listview'
 
 const { Option } = Select;
 
-function SortAction(props) {
+function SortAction({
+    columns,
+    showSorter,
+    setShowSorter,
+    sorterArr,
+    setSorterArrProperties
+}) {
     const [isPopoverVisible, setIsPopoverVisible] = useState(false);
 
-    const columns = props.columns;
     const handlePopoverVisibility = () => {
         setIsPopoverVisible(true);
     }
 
     const handleChange = (id, type) => (value) => {
-        const tempSorters = [...props.sorterArr];
+        const tempSorters = [...sorterArr];
         tempSorters.find(sortObj => sortObj.id === id)[type] = value;
-        props.setSorterArrProperties(tempSorters);
+        setSorterArrProperties(tempSorters);
         console.log('clicked', id, value);
     }
 
     const handleRemove = (id) => {
-        console.log('id------------', id, props.sorterArr.filter(sortObj => sortObj.id !== id))
-        props.setSorterArrProperties((props.sorterArr.filter(sortObj => sortObj.id !== id)));
+        console.log('id------------', id, sorterArr.filter(sortObj => sortObj.id !== id))
+        setSorterArrProperties((sorterArr.filter(sortObj => sortObj.id !== id)));
     }
 
     const renderSort = ({ id, column, order }) => {
@@ -66,10 +71,14 @@ function SortAction(props) {
 
     const handleAddInSorterArr = () => () => {
         const id = uuidv4();
-        props.setSorterArrProperties([...props.sorterArr, {
+        let column = ''
+        if (columns.length > 0) {
+            column = columns[0].dataIndex;
+        }
+        setSorterArrProperties([...sorterArr, {
             id,
             order: 'ascending',
-            column: 'date'
+            column
         }]);
     }
 
@@ -85,21 +94,21 @@ function SortAction(props) {
         const dragProps = {
             onDragEnd(fromIndex, toIndex) {
                 console.log('helloiamhere', fromIndex, toIndex);
-                const tempArr = [...props.sorterArr]
+                const tempArr = [...sorterArr]
                 console.log('tempArr', tempArr);
-                const item = props.sorterArr.splice(fromIndex, 1)[0];
-                props.sorterArr.splice(toIndex, 0, item);
-                props.setSorterArrProperties(tempArr);
+                const item = sorterArr.splice(fromIndex, 1)[0];
+                sorterArr.splice(toIndex, 0, item);
+                setSorterArrProperties(tempArr);
             },
             nodeSelector: '.single-sorter-div',
             handleSelector: '.drag-outlined-icon'
         };
-        console.log('addSort', props.sorterArr);
+        console.log('addSort', sorterArr);
         return (
             <div>
                 <div className='sort-overlay-root' style={{ display: 'flex', flexDirection: 'column' }}>
                     <ReactDragListView {...dragProps}>
-                        {props.sorterArr.map((sortObj) => renderSort(sortObj))}
+                        {sorterArr.map((sortObj) => renderSort(sortObj))}
                     </ReactDragListView>
                 </div>
                 {getAddSortButton()}
@@ -108,8 +117,8 @@ function SortAction(props) {
     }
     return (
         <React.Fragment>
-            <Popover visible={props.showSorter} trigger="click" placement="bottom" content={getSortPopover()}>
-                <div role="button" className="table-header-sort-button-text" onClick={() => props.setShowSorter()}>
+            <Popover visible={showSorter} trigger="click" placement="bottom" content={getSortPopover()}>
+                <div role="button" className="table-header-sort-button-text" onClick={() => setShowSorter()}>
                     Sort
                     </div>
             </Popover>

@@ -21,7 +21,7 @@ function TableSummary(props) {
 
 
     const getSummaryDropdownItems = ({ dataIndex, summaryValue, columnDataType }) => {
-        switch (columnDataType[dataIndex]) {
+        switch (columnDataType[dataIndex] ? columnDataType[dataIndex] : 'none') {
             case 'text':
                 return (<Menu selectedKeys={[summaryValue]} onClick={handleClick(dataIndex)} >
                     <Menu.Item key="none">None</Menu.Item>

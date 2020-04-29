@@ -19,10 +19,12 @@ class TableComp extends Component {
         this.columns = model.store.columns;
 
         this.columnDataType = {};
-
+        
+        if(this.columns.length > 0){
         this.columns.map(col => (
             this.columnDataType[col.dataIndex] = col.columnDataType
         ))
+        }
 
 
 
@@ -45,12 +47,8 @@ class TableComp extends Component {
 
 
 
-    handelSorter = (column, order) => {
-
-    }
-
     renderCustomTableColumnHeader = (col, title) => {
-        const { setFilterArrProperties, setSorterArrProperties } = this.props.model.store;
+        const { setFilterArrProperties, setSorterArrProperties,filterArr,sorterArr} = this.props.model.store;
         return (
             <CustomTableColumnHeader
                 key={col.dataIndex}
@@ -58,11 +56,11 @@ class TableComp extends Component {
                 dataIndex={col.dataIndex}
                 setShowFilter={this.setShowFilter}
                 columnDataType={this.columnDataType}
-                filterArr={this.props.model.store.filterArr}
+                filterArr={filterArr}
                 setShowSorter={this.setShowSorter}
                 setFilterArrProperties={setFilterArrProperties}
                 setSorterArrProperties={setSorterArrProperties}
-                sorterArr={this.props.model.store.sorterArr}
+                sorterArr={sorterArr}
             />
         )
     }
@@ -96,21 +94,22 @@ class TableComp extends Component {
     }
 
     handleTableSearch = (searchText) => {
-        this.props.model.store.setSearchText(searchText);
+        const {setSearchText} = this.props.model.store;
+        setSearchText(searchText);
     }
 
 
     render() {
         console.log('table-render');
-        const { computedData, columns, setSorterArrProperties, setFilterArrProperties, sorterArr, filterArr } = this.props.model.store;
-        const customColums = this.preProcessData(this.props.model.store);
+        const {store} = this.props.model;
+        const { computedData, columns, setSorterArrProperties, setFilterArrProperties, sorterArr, filterArr } = store;
+        const customColums = this.preProcessData(store);
         console.log('sort arra update', sorterArr)
         return (
             <div >
                 <TableHeader
                     columns={columns}
                     handleTableSearch={this.handleTableSearch}
-                    handelSorter={this.handelSorter}
                     columnDataType={this.columnDataType}
                     showFilter={this.state.showFilter}
                     setShowFilter={this.setShowFilter}
@@ -129,7 +128,8 @@ class TableComp extends Component {
                             total: computedData.length,
                             showTotal: total => `total ${total} items`,
                             responsive: true,
-                            pageSize: 20,
+                            defaultPageSize: 20,
+                            pageSizeOptions:['20','50','100','500','1000']
 
                         }}
                         columns={customColums}

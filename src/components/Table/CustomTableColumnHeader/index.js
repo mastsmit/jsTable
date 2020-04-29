@@ -1,5 +1,6 @@
 import React from 'react';
 import { Menu, Dropdown, Button, Input } from 'antd';
+import {defaultSelection} from '../../../consts/defaultSelection';
 import { v4 as uuidv4 } from 'uuid';
 
 import {
@@ -31,11 +32,11 @@ function CustomTableColumnHeader({ title,
                 setFilterArrProperties([...filterArr, {
                     id,
                     column: dataIndex,
-                    filters: columnDataType[dataIndex] === 'text' ? 'contains' : 'equalTo',
-                    condition: 'and',
+                    selectedFilter: defaultSelection[columnDataType[dataIndex]],
+                    condition: 'or',
                     textInput: ''
                 }])
-                // setShowFilter()
+                setShowFilter()
                 break;
             }
             case 'sortAscending': {

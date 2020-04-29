@@ -4,6 +4,10 @@ export const rootTable = (colors) => css`
 .ant-table-thead > tr > th{
     padding: 0px;
 }
+.ant-pagination,.ant-table-pagination,.ant-table-pagination-right{
+float:none;
+text-align:center;
+}
     .ant-table-thead{
         .ant-table-cell{
             :hover{
