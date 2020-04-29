@@ -40,22 +40,17 @@ class Table {
     }
 
     resolveFilters(obj, column, filter, text) {
-        console.log('column', column, 'filter', filter, 'text', text);
         switch (filter) {
             case 'contains':
-                if (text === '') return true;
                 return obj[column] && obj[column].includes(text)
 
             case 'is':
-                if (text === '') return true;
                 return obj[column] && obj[column] === text
 
             case 'isNot':
-                if (text === '') return true;
                 return obj[column] ? !obj[column] === text : true
 
             case 'doesNotContain':
-                if (text === '') return true;
                 return obj[column] ? !(obj[column].includes(text)) : true
 
             case 'isEmpty':
@@ -63,144 +58,51 @@ class Table {
             case 'isNotEmpty':
                 return (obj[column])
             case 'equalTo':
-                if (text === '') return true;
                 return obj[column] ? obj[column] === parseInt(text) : false
             case 'isNotEqualTo':
-                if (text === '') return true;
                 return obj[column] ? obj[column] !== parseInt(text) : false
             case 'greaterThan':
-                if (text === '') return true;
                 return obj[column] ? obj[column] > parseInt(text) : false
             case 'lessThan':
-                if (text === '') return true;
                 return obj[column] ? obj[column] < parseInt(text) : false
             case 'greaterThanEqualTo':
-                if (text === '') return true;
                 return obj[column] ? obj[column] >= parseInt(text) : false
             case 'lessThanEqualTo':
-                if (text === '') return true;
                 return obj[column] ? obj[column] <= parseInt(text) : false
             default:
                 return true
         }
     }
 
-    resolveFilters2(column, filter, text) {
-        console.log('column', column, 'filter', filter, 'text', text);
+    resolveEmptyFilters(filter, text) {
         switch (filter) {
             case 'contains':
-                if (text === '') return this.data;
-                else {
-                    return this.data.filter(obj => {
-                        if (obj[column] && obj[column].includes(text)) {
-                            return obj;
-                        }
-                    })
-                }
             case 'is':
-                if (text === '') return this.data;
-                else {
-                    return this.data.filter(obj => {
-                        if (obj[column] && obj[column] === text) {
-                            return obj;
-                        }
-                    })
-                }
             case 'isNot':
-                if (text === '') return this.data;
-                else {
-                    return this.data.filter(obj => {
-                        if (obj[column]) {
-                            if (!(obj[column] === text)) {
-                                return obj;
-                            }
-                        }
-                        else {
-                            return obj
-                        }
-                    })
-                }
             case 'doesNotContain':
-                if (text === '') return this.data;
-                else {
-                    return this.data.filter(obj => {
-                        if (obj[column]) {
-                            if (!(obj[column].includes(text))) {
-                                return obj;
-                            }
-                        }
-                        else return obj
-                    })
-                }
-            case 'isEmpty':
-                return this.data.filter(obj => {
-                    if (!obj[column]) {
-                        return obj
-                    }
-                })
-            case 'isNotEmpty':
-                return this.data.filter(obj => {
-                    if (obj[column]) {
-                        return obj
-                    }
-                })
             case 'equalTo':
-                if (text === '') return this.data;
-                return this.data.filter(obj => {
-                    if (obj[column]) {
-                        if (obj[column] === parseInt(text)) {
-                            return obj
-                        }
-                    }
-                })
             case 'isNotEqualTo':
-                if (text === '') return this.data;
-                return this.data.filter(obj => {
-                    if (obj[column] && obj[column] !== parseInt(text)) {
-                        return obj
-                    }
-                })
             case 'greaterThan':
-                if (text === '') return this.data;
-                return this.data.filter(obj => {
-                    if (obj[column] && obj[column] > parseInt(text)) {
-                        return obj;
-                    }
-                })
             case 'lessThan':
-                if (text === '') return this.data;
-                return this.data.filter(obj => {
-                    if (obj[column] && obj[column] < parseInt(text)) {
-                        return obj;
-                    }
-                })
             case 'greaterThanEqualTo':
-                if (text === '') return this.data;
-                return this.data.filter(obj => {
-                    if (obj[column] && obj[column] >= parseInt(text)) {
-                        return obj;
-                    }
-                })
             case 'lessThanEqualTo':
-                if (text === '') return this.data;
-                return this.data.filter(obj => {
-                    if (obj[column] && obj[column] <= parseInt(text)) {
-                        return obj;
-                    }
-                })
+                if (text === '') return true;
+                return false
             default:
-                return this.data
+                return false
         }
     }
 
+
     get filteredData() {
-        if (this.filterArr.length === 0) {
+        const nonEmptyFilter = this.filterArr.filter(filter => !this.resolveEmptyFilters(filter['selectedFilter'], filter['textInput']));
+        if (nonEmptyFilter.length === 0) {
             return this.data;
         }
 
         return this.data.filter(obj => {
             let toTakeOrNot = false;
-            this.filterArr.forEach(property => {
+            nonEmptyFilter.forEach(property => {
                 const condition = property['condition'] || 'or';
                 const resolvedFilter = this.resolveFilters(obj, property['column'], property['selectedFilter'], property['textInput']);
                 if (condition === 'or') {
