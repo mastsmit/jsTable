@@ -1,6 +1,7 @@
 import React from 'react';
 import { Input, Popover } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
+import debounce from 'lodash/debounce';
 import SortAction from './Actions/SortAction';
 import FilterAction from './Actions/FilterAction';
 import * as s from './styles';
@@ -19,6 +20,7 @@ function TableHeader({
     handleTableSearch }) {
     const filterArrlength = filterArr.length;
     const sorterArrLength = sorterArr.length;
+    const handleTableSearchDebounce = debounce(handleTableSearch, 300);
     return (
         <div className={s.rootTableHeader(colors, filterArrlength, sorterArrLength)}>
             <div className="table-header-filter-button">
@@ -48,7 +50,7 @@ function TableHeader({
                     <Input
                         placeholder="type to search"
                         allowClear
-                        onChange={(e) => handleTableSearch(e.target.value)} />
+                        onChange={(e) => handleTableSearchDebounce(e.target.value)} />
                 </div>
             </div>
         </div>

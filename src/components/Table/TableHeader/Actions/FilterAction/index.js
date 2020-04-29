@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import debounce from 'lodash/debounce';
 import { Popover, Select, Input, Tooltip } from 'antd';
 import { PlusOutlined, CloseOutlined, DragOutlined } from '@ant-design/icons';
 import { v4 as uuidv4 } from 'uuid';
@@ -22,10 +23,11 @@ function FilterAction({
     let length = filterArr.length;
 
     const handleChange = (id, type) => (event) => {
+        console.log('evetb======', event)
         let tempFilters = [...filterArr];
         console.log('fdafsadfdas', id, type)
         if (type === 'textInput') {
-            tempFilters.find(filterObj => filterObj.id === id)[type] = event.target.value;
+            tempFilters.find(filterObj => filterObj.id === id)[type] = event;
         } else if (type === 'column') {
             const tempObj = tempFilters.find(filterObj => filterObj.id === id);
             tempObj[type] = event;
@@ -47,6 +49,7 @@ function FilterAction({
     const renderFilter = ({ id, column, selectedFilter, condition }, index, conditionValue) => {
         const lessThan = "<";
         const lessThanEqualTo = "<=";
+        const handleInputChangeDebounce = debounce(handleChange(id, 'textInput'), 300);
 
         return (
             <div className={s.headerDropdown(colors)} id={id}>
@@ -94,7 +97,10 @@ function FilterAction({
                         }
                     </div>
                     <div className="filter-text-input">
-                        <Input id={id} placeholder="value" onChange={handleChange(id, 'textInput')} />
+                        <Input id={id} placeholder="value" onChange={(e) => {
+                            const input = e.target.value;
+                            handleInputChangeDebounce(input)
+                        }} />
                     </div>
                 </div>
                 <div role="button" onClick={() => handleRemove(id)} style={{ cursor: 'pointer', margin: '0px 0px 0px auto', minWidth: '0px' }}>

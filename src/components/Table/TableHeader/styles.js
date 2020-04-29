@@ -10,7 +10,6 @@ export const rootTableHeader = (colors, filterArrLength, sorterArrLength) =>
     .table-header-search-button{
         color: ${colors.columnCellTextColor};
         display:flex;
-        cursor:pointer;
         .search-icon{
             margin:0px 5px;
             display:flex;
@@ -18,15 +17,20 @@ export const rootTableHeader = (colors, filterArrLength, sorterArrLength) =>
             flex-direction:column;
         }
         .search-input{
+            cursor:pointer;
             .ant-input-affix-wrapper{
             background:none;
+            box-shadow: none !important;
             border:none;
             padding:4px 0px ;
+            
             }
             .ant-input-affix-wrapper > input.ant-input{
                 background: none;
                 color: ${colors.cellTextColor};
+                
             }
+
         }
         :hover{
             background-color:${colors.hoverColor};
