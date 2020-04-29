@@ -5,6 +5,7 @@ import TableHeader from './TableHeader';
 import TableSummary from '../TableSummary';
 import { Table } from 'antd';
 import * as s from './styles';
+import { computed } from 'mobx';
 
 class TableComp extends Component {
     constructor(props) {
@@ -14,7 +15,6 @@ class TableComp extends Component {
             showSorter: false,
         };
         const { model } = this.props;
-        this.data = model.store.data;
         this.columns = model.store.columns;
         this.colors = this.props.colors;
 
@@ -128,10 +128,10 @@ class TableComp extends Component {
 
                         }}
                         columns={customColums}
-                        summary={(pageData) =>
+                        summary={() =>
                             <TableSummary
                                 colors={this.colors}
-                                pageData={pageData}
+                                pageData={computedData}
                                 columnDataType={this.columnDataType}
                                 columns={columns}
                             />}

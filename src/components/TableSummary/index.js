@@ -67,14 +67,15 @@ function TableSummary(props) {
                 return `EMPTY ${value}`
 
             case 'countUniqueValues':
-                const uniqueValues = []
+                const uniqueValues = {}
+
                 pageData.filter(element => {
-                    if (element[dataIndex] && uniqueValues.indexOf(element[dataIndex]) !== 0) {
+                    if (element[dataIndex] && uniqueValues[(element[dataIndex])] !== 1) {
                         value = value + 1
                     }
-                    uniqueValues.push(element[dataIndex]);
+                    uniqueValues[element[dataIndex]] = 1;
                 })
-                return `UNIQUE ${value}`
+                return `UNIQUE ${Object.keys(uniqueValues).length}`
 
             case 'countNotEmpty':
                 pageData.forEach(element => {
@@ -99,7 +100,7 @@ function TableSummary(props) {
                     }
                 })
                 value = sum / numbers;
-                return `AVERAGE ${value}`
+                return `AVERAGE ${Number(value).toFixed(2)}`
             case 'median':
                 let arr = [], sortedArr = [], lengthOfArr;
                 pageData.forEach(element => {
@@ -121,8 +122,8 @@ function TableSummary(props) {
                             else {
                                 if (element[dataIndex] < min) min = element[dataIndex]
                             }
+                            isFirstIndex = false
                         }
-                        isFirstIndex = false
                     })
                     return `MIN ${min}`;
                 }
@@ -135,8 +136,9 @@ function TableSummary(props) {
                         else {
                             if (element[dataIndex] > max) max = element[dataIndex]
                         }
+                        isFirstIndex = false
+
                     }
-                    isFirstIndex = false
                 })
                 return `MAX ${max}`;
             default:
