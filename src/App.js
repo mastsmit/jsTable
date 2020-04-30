@@ -168,6 +168,8 @@ class App extends Component {
       <div className="App" >
         <TableComp colors={darkColors} model={this.model} />
         <TableComp model={this.model} colors={lightColors} />
+        <TableComp colors={darkColors} model={this.model} pagination={false} />
+
       </div>
     );
   }

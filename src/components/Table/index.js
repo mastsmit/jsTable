@@ -177,7 +177,9 @@ class TableComp extends Component {
                                         columnDataType={this.columnDataType}
                                         columns={columns}
                                     />}
-                                dataSource={computedData} />
+                                dataSource={computedData}
+                                {...this.props}
+                            />
                         </ReactDragListView.DragColumn>
                     </ReactDragListView>
                 </div>
