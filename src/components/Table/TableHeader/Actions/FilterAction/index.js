@@ -7,6 +7,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { defaultSelection } from '../../../../../consts/defaultSelection';
 import ReactDragListView from 'react-drag-listview'
 import * as s from '../../styles';
+import { lineClassName } from '../../../styles';
 const { Option } = Select;
 function FilterAction({
     columns,
@@ -149,7 +150,7 @@ function FilterAction({
         return (
             <div key="43">
                 <div className='filter-overlay-root' style={{ display: 'flex', flexDirection: 'column' }}>
-                    <ReactDragListView {...dragProps}>
+                    <ReactDragListView {...dragProps} lineClassName={lineClassName()}>
                         {filterArr.map((filterObj, index) => renderFilter(filterObj, index, conditionValue))}
                     </ReactDragListView>
                 </div>

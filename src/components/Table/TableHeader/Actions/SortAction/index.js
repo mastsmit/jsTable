@@ -5,6 +5,7 @@ import c from 'classnames';
 import { PlusOutlined, CloseOutlined, DragOutlined } from '@ant-design/icons';
 import ReactDragListView from 'react-drag-listview'
 import * as s from '../../styles';
+import { lineClassName } from '../../../styles';
 
 
 const { Option } = Select;
@@ -99,7 +100,7 @@ function SortAction({
         return (
             <div>
                 <div className='sort-overlay-root' style={{ display: 'flex', flexDirection: 'column' }}>
-                    <ReactDragListView {...dragProps}>
+                    <ReactDragListView {...dragProps} lineClassName={lineClassName()}>
                         {sorterArr.map((sortObj) => renderSort(sortObj))}
                     </ReactDragListView>
                 </div>
