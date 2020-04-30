@@ -158,7 +158,7 @@ class TableComp extends Component {
                         <ReactDragListView.DragColumn {...columnDragProps} lineClassName={s.lineClassName()}>
                             <Table
                                 bordered
-                                scroll={{ x: 1300 }}
+                                scroll={{ x: 1300, y: 450 }}
                                 pagination={{
                                     current: this.state.currentPageNumber,
                                     total: computedData.length,
