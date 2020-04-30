@@ -5,7 +5,12 @@ import { DownOutlined } from '@ant-design/icons';
 import * as s from './styles';
 import { dropDownStyles } from '../Table/styles'
 
-function TableSummary(props) {
+function TableSummary({
+    colors,
+    pageData,
+    columnDataType,
+    columns
+}) {
     const [selectedSummaryKey, setSelectedSummaryKey] = useState({});
     const handleClick = (dataIndex) => (value) => {
         const temp = { ...selectedSummaryKey };
@@ -14,7 +19,7 @@ function TableSummary(props) {
     }
     useEffect(() => {
         const temp = {};
-        props.columns.forEach(col => temp[col.dataIndex] = 'none')
+        columns.forEach(col => temp[col.dataIndex] = 'none')
         setSelectedSummaryKey(temp);
     }, [])
 
@@ -151,7 +156,7 @@ function TableSummary(props) {
         return (
             <Dropdown key={dataIndex} trigger="click" overlay={getSummaryDropdownItems({ dataIndex, summaryValue, columnDataType, colors })} placement="topCenter">
                 <th
-                    className={c(s.tableSummary(props.colors), index === 0 ? "ant-table-cell ant-table-cell-fix-left ant-table-cell-fix-left-last" : 'ant-table-cell')}
+                    className={c(s.tableSummary(colors), index === 0 ? "ant-table-cell ant-table-cell-fix-left ant-table-cell-fix-left-last" : 'ant-table-cell')}
                     style={index === 0 ? { left: '0px' } : {}}
                 >
                     <div className="main-div">
@@ -174,8 +179,8 @@ function TableSummary(props) {
     return (
         <tr>
             {
-                props.columns.map((menuItem, index) => (
-                    renderSummaryDropdown(menuItem, props.pageData, props.columnDataType, index, props.colors)
+                columns.map((menuItem, index) => (
+                    renderSummaryDropdown(menuItem, pageData, columnDataType, index, colors)
                 ))
             }
         </tr>
