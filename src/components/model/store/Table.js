@@ -27,15 +27,39 @@ class Table {
 
     setFilterArrProperties = (filterArr) => {
         this.filterArr = filterArr;
+        // this.fetchWebWorker();
     }
 
     setSorterArrProperties = (sorterArr) => {
         this.sorterArr = sorterArr;
+        // this.fetchWebWorker();
     }
 
     setSearchText = (searchText) => {
         this.searchText = searchText;
+        // this.fetchWebWorker()
     }
+
+
+    // fetchWebWorker = () => {
+    //     const nonEmptyFilter = this.filterArr.filter(filter => !this.resolveEmptyFilters(filter['selectedFilter'], filter['textInput']));
+    // 	if (nonEmptyFilter.length === 0 && this.searchText === '' && this.sorterArr.length === 0) {
+    //         this.searchedData = this.data;
+    //         return;
+    //     }
+
+    //     console.time('startworker')
+
+    //     this.workerObj.postMessage(JSON.stringify({ data: this.data, searchText: this.searchText, filterArr: this.filterArr, sorterArr: this.sorterArr }));
+    //     console.time('startworker1')
+    //     this.workerObj.addEventListener('message', event => {
+    //         console.log('smit---', event.data)
+    //         console.timeEnd('startworker1')
+    //         this.searchedData = event.data;
+    //         console.timeEnd('startworker');
+    //     });
+    // }
+
 
     resolveFilters(obj, column, filter, text) {
         switch (filter) {
@@ -160,6 +184,10 @@ class Table {
         return searchedData
     }
 
+    // get computedData() {
+    //     console.log('dataISCHANGED--', this.searchedData)
+    //     return this.searchedData;
+    // }
 
 
 }
@@ -178,6 +206,7 @@ decorate(Table, {
     filteredData: computed,
     setSearchText: action,
     setData: action,
-    searchText: observable
+    searchText: observable,
+    // searchedData: observable,
 })
 export default Table;
