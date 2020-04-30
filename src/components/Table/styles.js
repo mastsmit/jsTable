@@ -49,8 +49,57 @@ export const rootTable = (colors) => css`
 }
 .ant-pagination,.ant-table-pagination,.ant-table-pagination-right{
 float:none;
+margin: 0px !important;
+padding: 16px 0px ;
+background-color: ${colors.hoverColor};
 text-align:center;
 }
+/* .ant-pagination-prev.ant-pagination-disabled{
+    background-color: ${colors.cellColor};
+    color: ${colors.cellTextColor};
+} */
+
+.ant-table-pagination.ant-pagination {
+    margin: 16px 0;
+    float: none;
+    text-align: center;
+  }
+
+  .ant-pagination-next,
+  .ant-pagination-prev{
+    a {
+      background-color: ${colors.cellColor};
+      border: none !important;
+      color: ${colors.cellTextColor};
+    }
+    i {
+      color: ${colors.cellTextColor};
+    }
+  }
+
+  .ant-pagination-item {
+    a {
+      color: ${colors.cellTextColor};
+    }
+    background-color: ${colors.cellColor};
+    border: none !important;
+  }
+
+  .ant-pagination-item-active {
+    a {
+      color: 'blue';
+    }
+    background-color: ${colors.borderColor};
+    border-radius: 2px !important;
+  }
+  .ant-select-single:not(.ant-select-customize-input) .ant-select-selector{
+      background-color: ${colors.cellColor};
+      color : ${colors.cellTextColor};
+      border: 1px solid ${colors.borderColor};
+  }
+  .ant-select-selector{
+
+  }
 `;
 
 

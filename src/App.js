@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
+import { v4 as uuidv4 } from 'uuid';
 import Model from './components/model'
 import TableComp from './components/Table';
 import { theme } from './consts/themeColors';
 import './App.css';
 import data_large from './largeData.json';
+import { Switch } from 'antd';
 const darkColors = theme.color.dark;
 const lightColors = theme.color.light;
 
@@ -157,19 +159,31 @@ const columns = [
 class App extends Component {
   constructor(props) {
     super(props);
+    const data_large_with_unique_keys = data_large.map(obj => {
+      obj.key = uuidv4();
+      return obj
+    });
+    this.state = { isDarkMode: true };
     this.model = new Model();
     this.model.store.syncData({
-      data,
+      data: data_large_with_unique_keys,
       columns
     });
   }
+
+  onChange = () => {
+    this.setState({ isDarkMode: !this.state.isDarkMode });
+  }
+
   render() {
     return (
       <div className="App" >
-        <TableComp colors={darkColors} model={this.model} />
-        <TableComp model={this.model} colors={lightColors} />
-        <TableComp colors={darkColors} model={this.model} pagination={false} />
-
+        Light <Switch onChange={this.onChange} />
+        {this.state.isDarkMode ?
+          <TableComp colors={darkColors} model={this.model} />
+          :
+          <TableComp model={this.model} colors={lightColors} />
+        }
       </div>
     );
   }

@@ -19,7 +19,6 @@ class TableComp extends Component {
         };
         const { model } = this.props;
         this.columns = model.store.columns;
-        this.colors = this.props.colors;
 
         this.columnDataType = {};
 
@@ -31,13 +30,14 @@ class TableComp extends Component {
     }
 
     renderCustomTableColumnHeader = (col, title) => {
+        const colors = this.props.colors;
         const { setFilterArrProperties, setSorterArrProperties, filterArr, sorterArr } = this.props.model.store;
         return (
             <CustomTableColumnHeader
                 key={col.dataIndex}
                 title={title}
                 dataIndex={col.dataIndex}
-                colors={this.colors}
+                colors={colors}
                 setShowFilter={this.setShowFilter}
                 columnDataType={this.columnDataType}
                 filterArr={filterArr}
@@ -91,6 +91,7 @@ class TableComp extends Component {
 
     render() {
         const { store } = this.props.model;
+        const colors = this.props.colors;
         const { setData, data, computedData, setTableColumn, columns, setSorterArrProperties, setFilterArrProperties, sorterArr, filterArr } = store;
         const customColumns = this.preProcessData(store);
         const columnDragProps = {
@@ -139,7 +140,7 @@ class TableComp extends Component {
         return (
             <div >
                 <TableHeader
-                    colors={this.colors}
+                    colors={colors}
                     columns={columns}
                     handleTableSearch={this.handleTableSearch}
                     columnDataType={this.columnDataType}
@@ -172,7 +173,7 @@ class TableComp extends Component {
                                 columns={customColumns}
                                 summary={() =>
                                     <TableSummary
-                                        colors={this.colors}
+                                        colors={colors}
                                         pageData={computedData}
                                         columnDataType={this.columnDataType}
                                         columns={columns}

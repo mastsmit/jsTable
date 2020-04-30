@@ -129,11 +129,14 @@ class Table {
 
         return this.data.filter(obj => {
             let toTakeOrNot = false;
+            const onlyOneFilter = nonEmptyFilter.length === 1;
             nonEmptyFilter.forEach(property => {
                 const condition = property['condition'] || 'or';
                 const resolvedFilter = this.resolveFilters(obj, property['column'], property['selectedFilter'], property['textInput']);
                 if (condition === 'or') {
                     toTakeOrNot = toTakeOrNot || resolvedFilter;
+                } else if (onlyOneFilter) {
+                    toTakeOrNot = resolvedFilter;
                 } else {
                     toTakeOrNot = toTakeOrNot && resolvedFilter;
                 }
