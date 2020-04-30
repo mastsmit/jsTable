@@ -1,8 +1,12 @@
 import { observable, action, decorate, computed } from 'mobx';
+// import worker from '../../../worker.js';
+// import WebWorker from '../../../workerSetup';
 
 
 class Table {
+    // workerObj = new WebWorker(worker);
     data = [];
+    // searchedData = [];
     columns = [];
     sorterArr = [];
     filterArr = [];
@@ -11,6 +15,7 @@ class Table {
 
     syncData(properties) {
         this.data = properties.data;
+        // this.searchedData = this.data
         this.columns = properties.columns;
         if (this.columns.length > 0) {
             this.columns[0].fixed = 'left';
@@ -43,7 +48,7 @@ class Table {
 
     // fetchWebWorker = () => {
     //     const nonEmptyFilter = this.filterArr.filter(filter => !this.resolveEmptyFilters(filter['selectedFilter'], filter['textInput']));
-    // 	if (nonEmptyFilter.length === 0 && this.searchText === '' && this.sorterArr.length === 0) {
+    //     if (nonEmptyFilter.length === 0 && this.searchText === '' && this.sorterArr.length === 0) {
     //         this.searchedData = this.data;
     //         return;
     //     }
