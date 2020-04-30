@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Popover, Select, Tooltip } from 'antd';
 import { v4 as uuidv4 } from 'uuid';
 import c from 'classnames';

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Menu, Dropdown, Button, Input } from 'antd';
+import { Menu, Dropdown } from 'antd';
 import { defaultSelection } from '../../../consts/defaultSelection';
 import { v4 as uuidv4 } from 'uuid';
 import {
