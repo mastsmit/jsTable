@@ -33,28 +33,30 @@ function SortAction({
 
         return (
             <div className={c('single-sorter-div-wrapper', s.headerDropdown(colors))} id={id}>
-                <div className="drag-outlined-icon" style={{ marginRight: '8px' }}>
+                <div className="drag-outlined-icon" >
                     <DragOutlined />
                 </div>
-                <div className='sorter-column-options'>
-                    <Select
-                        dropdownClassName={s.style1(colors)}
-                        value={column}
-                        defaultValue={column}
-                        onChange={handleChange(id, 'column')}
-                    >
-                        {columns.map(col => (
-                            <Option key={col.dataIndex} value={col.dataIndex}>{col.titleString}</Option>
-                        ))}
-                    </Select>
+                <div className="single-sorter-wrapper">
+                    <div className='sorter-column-options'>
+                        <Select
+                            dropdownClassName={s.style1(colors)}
+                            value={column}
+                            defaultValue={column}
+                            onChange={handleChange(id, 'column')}
+                        >
+                            {columns.map(col => (
+                                <Option key={col.dataIndex} value={col.dataIndex}>{col.titleString}</Option>
+                            ))}
+                        </Select>
+                    </div>
+                    <div style={{ margin: '0px 8px 0px 0px ' }}>
+                        <Select dropdownClassName={s.style1(colors)} value={order} defaultValue={order} onChange={handleChange(id, 'order')}>
+                            <Option value="ascending">Ascending</Option>
+                            <Option value="descending">Descending</Option>
+                        </Select>
+                    </div>
                 </div>
-                <div style={{ margin: '0px 8px 0px 0px ' }}>
-                    <Select dropdownClassName={s.style1(colors)} value={order} defaultValue={order} onChange={handleChange(id, 'order')}>
-                        <Option value="ascending">Ascending</Option>
-                        <Option value="descending">Descending</Option>
-                    </Select>
-                </div>
-                <div role="button" onClick={() => handleRemove(id)} style={{ cursor: 'pointer', margin: '0px 0px 0px 8px' }}>
+                <div role="button" onClick={() => handleRemove(id)} style={{ cursor: 'pointer', margin: '0px 10px 0px auto', minWidth: '0px' }}>
                     <Tooltip title="Remove sort rule">
                         <CloseOutlined />
                     </Tooltip>

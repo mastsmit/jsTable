@@ -165,7 +165,7 @@ class TableComp extends Component {
                                     responsive: true,
                                     pageSize: this.state.currentPageSize,
                                     onChange: (page) => this.setState({ currentPageNumber: page }),
-                                    onShowSizeChange: (page, pageSize) => this.setState({ currentPageSize: pageSize }),
+                                    onShowSizeChange: (page, pageSize) => this.setState({ currentPageSize: pageSize, currentPageNumber: page }),
                                     showSizeChanger: true,
                                     pageSizeOptions: [10, 20, 50, 100, 500, 1000]
                                 }}

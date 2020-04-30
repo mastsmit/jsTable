@@ -79,17 +79,26 @@ export const popOverstyle = (colors) => css`
 export const headerDropdown = (colors) => css`
 
  display: flex; 
- align-items: center ; 
- padding: 4px 8px; 
+ align-items: center ;
+ margin: 5px 0px;
+ width:100%;
+ user-select:none;
+ box-sizing:border-box;
  .ant-select {
     margin-right: 10px !important;
    
  }
- .single-filter-wrapper{
+ .single-filter-wrapper,.single-sorter-wrapper{
     display: flex; 
     flex: 1 1 auto; 
     min-width: 0px; 
     margin: 0px 8px 0px 8px;
+ }
+ .drag-outlined-icon{
+     display:flex;
+     align-items: center;
+     justify-content: center;
+     margin-left: 10px;
  }
  .filter-column-options,.filter-options,.sorter-column-options{
      .ant-select-selector{

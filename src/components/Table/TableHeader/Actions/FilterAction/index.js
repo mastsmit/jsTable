@@ -96,7 +96,7 @@ function FilterAction({
                         }} />
                     </div>
                 </div>
-                <div role="button" onClick={() => handleRemove(id)} style={{ cursor: 'pointer', margin: '0px 0px 0px auto', minWidth: '0px' }}>
+                <div role="button" onClick={() => handleRemove(id)} style={{ cursor: 'pointer', margin: '0px 10px 0px auto', minWidth: '0px' }}>
                     <Tooltip title="Remove filter rule">
                         <CloseOutlined />
                     </Tooltip>
