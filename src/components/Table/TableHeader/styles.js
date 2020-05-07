@@ -161,13 +161,24 @@ export const style1 = (colors) => css`
       }
       .ant-picker-cell-in-view{
         color: ${colors.cellTextColor} !important;
+        
         }
-        .ant-picker-cell{
-            :hover{
-                background-color: ${colors.hoverColor} !important;
-            }
-        }
+
   }
+  .ant-picker-cell-disabled::before {
+    background: none !important;
+}
+  .ant-picker-cell:hover:not(.ant-picker-cell-selected):not(.ant-picker-cell-range-start):not(.ant-picker-cell-range-end):not(.ant-picker-cell-range-hover-start):not(.ant-picker-cell-range-hover-end) .ant-picker-cell-inner {
+    background-color: ${colors.hoverColor} !important;
+}
+
+
+.ant-picker-cell-in-view.ant-picker-cell-in-range::before {
+    background:  ${colors.hoverColor} !important;
+}
+    .ant-picker-cell-in-view.ant-picker-cell-range-start:not(.ant-picker-cell-range-start-single)::before, .ant-picker-cell-in-view.ant-picker-cell-range-end:not(.ant-picker-cell-range-end-single)::before {
+        background:${colors.hoverColor};
+}
 
   .ant-select-item-option {
     background-color: transparent !important;
