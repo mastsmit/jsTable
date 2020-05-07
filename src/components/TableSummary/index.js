@@ -29,6 +29,7 @@ function TableSummary({
     const getSummaryDropdownItems = ({ dataIndex, summaryValue, columnDataType, colors }) => {
         switch (columnDataType[dataIndex] ? columnDataType[dataIndex] : 'none') {
             case 'text':
+            case 'date':
                 return (<div className={dropDownStyles(colors)}><Menu selectedKeys={[summaryValue]} onClick={handleClick(dataIndex)} >
                     <Menu.Item key="none">None</Menu.Item>
                     <Menu.Item key="countAll">Count all</Menu.Item>
