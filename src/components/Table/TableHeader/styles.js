@@ -101,6 +101,7 @@ export const headerDropdown = (colors) => css`
      margin-left: 10px;
  }
  .filter-column-options,.filter-options,.sorter-column-options{
+     display: flex;
      .ant-select-selector{
          min-width:120px;
      }
@@ -121,10 +122,52 @@ export const headerDropdown = (colors) => css`
        background-color:  ${colors.popUpColor} !important;
        border: 1px solid  ${colors.borderColor} !important;
 
-  }`;
+  }
+      .range-picker,.date-picker{
+      background-color: ${colors.popUpColor};
+      border: 1px solid ${colors.borderColor};
+  }
+  
+  `;
 
 export const style1 = (colors) => css`
   background-color: ${colors.popUpColor} !important;
+  .ant-picker-panel-container{
+    background-color: ${colors.cellColor} !important;
+  }
+  .ant-picker-panel{
+      border: 1px solid ${colors.borderColor};
+  }
+  .ant-picker-header{
+    border-bottom: 1px solid ${colors.borderColor};
+  }
+  .ant-picker-footer{
+      border-top: 1px solid ${colors.borderColor};
+  }
+  .ant-picker-body,.ant-picker-header,.ant-picker-footer{
+    color: ${colors.cellTextColor} !important;
+      .ant-picker-today-btn,.ant-picker-header-super-prev-btn,
+      .ant-picker-header-prev-btn,
+      .ant-picker-header-next-btn,.ant-picker-header-super-next-btn{
+        color: ${colors.cellTextColor} !important;
+      }
+      .ant-picker-content{
+          th{
+            color: ${colors.cellTextColor} !important;
+          }
+      }
+      .ant-picker-cell{
+        color: ${colors.hoverColor};
+      }
+      .ant-picker-cell-in-view{
+        color: ${colors.cellTextColor} !important;
+        }
+        .ant-picker-cell{
+            :hover{
+                background-color: ${colors.hoverColor} !important;
+            }
+        }
+  }
 
   .ant-select-item-option {
     background-color: transparent !important;

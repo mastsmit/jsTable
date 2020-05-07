@@ -1,4 +1,5 @@
 export const defaultSelection = {
     text: 'contains',
-    number: 'equalTo'
+    number: 'equalTo',
+    date: 'range',
 }

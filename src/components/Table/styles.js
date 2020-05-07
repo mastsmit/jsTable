@@ -100,6 +100,17 @@ text-align:center;
   .ant-select-selector{
 
   }
+  .range-picker,.date-picker{
+      .ant-picker-dropdown{
+        background-color: ${colors.popUpColor};
+      }
+      background-color: ${colors.popUpColor};
+  }
+  .range-picker-dropdown,.date-picker-dropdown{
+  .ant-picker-panel-container{
+    background-color: ${colors.popUpColor} !important;
+  }
+}
 `;
 
 

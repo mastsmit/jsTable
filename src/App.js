@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { v4 as uuidv4 } from 'uuid';
+import moment from 'moment';
 import Model from './components/model'
 import TableComp from './components/Table';
 import { theme } from './consts/themeColors';
@@ -121,12 +122,16 @@ const data = [
     note: 'transfer',
   },
 ]
+
+data.map(obj => {
+  obj['date'] = moment().toISOString()
+})
 const columns = [
   {
     titleString: 'Date',
     dataIndex: 'date',
     width: 200,
-    columnDataType: 'text',
+    columnDataType: 'date',
   },
   {
     titleString: 'Amount',
@@ -166,7 +171,8 @@ class App extends Component {
     this.state = { isDarkMode: true };
     this.model = new Model();
     this.model.store.syncData({
-      data: data_large_with_unique_keys,
+      data,
+      // data_large_with_unique_keys,
       columns
     });
   }

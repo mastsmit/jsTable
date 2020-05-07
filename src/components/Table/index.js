@@ -51,13 +51,11 @@ class TableComp extends Component {
 
     preProcessData = ({ columns }) => {
         let updatedColumns = JSON.parse(JSON.stringify(columns))
-        if (columns) {
-            updatedColumns.forEach(col => {
-                const title = col.titleString;
-                col.title = this.renderCustomTableColumnHeader(col, title)
-                return col
-            })
-        }
+        updatedColumns.forEach(col => {
+            const title = col.titleString;
+            col.title = this.renderCustomTableColumnHeader(col, title)
+            return col
+        })
         return updatedColumns;
     }
 

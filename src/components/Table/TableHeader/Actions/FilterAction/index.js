@@ -1,14 +1,15 @@
 import React from 'react';
 import debounce from 'lodash/debounce';
-import { Popover, Select, Input, Tooltip } from 'antd';
+import { Popover, Select, Input, Tooltip, DatePicker } from 'antd';
 import c from 'classnames';
 import { PlusOutlined, CloseOutlined, DragOutlined } from '@ant-design/icons';
 import { v4 as uuidv4 } from 'uuid';
 import { defaultSelection } from '../../../../../consts/defaultSelection';
-import ReactDragListView from 'react-drag-listview'
+import ReactDragListView from 'react-drag-listview';
 import * as s from '../../styles';
 import { lineClassName } from '../../../styles';
 const { Option } = Select;
+const { RangePicker } = DatePicker;
 function FilterAction({
     columns,
     columnDataType,
@@ -21,9 +22,7 @@ function FilterAction({
 
     const handleChange = (id, type) => (event) => {
         let tempFilters = [...filterArr];
-        if (type === 'textInput') {
-            tempFilters.find(filterObj => filterObj.id === id)[type] = event;
-        } else if (type === 'column') {
+        if (type === 'column') {
             const tempObj = tempFilters.find(filterObj => filterObj.id === id);
             tempObj[type] = event;
             tempObj.selectedFilter = defaultSelection[columnDataType[event]];
@@ -35,11 +34,26 @@ function FilterAction({
         setFilterArrProperties(tempFilters)
     }
 
+    const handleDateChange = (id, filterType) => (dates, dateString) => {
+        let tempFilters = [...filterArr];
+        const tempObj = tempFilters.find(filterObj => filterObj.id === id);
+
+        if (filterType === 'range') {
+            tempObj['fromString'] = dateString[0];
+            tempObj['toString'] = dateString[1];
+        }
+        else {
+            tempObj['dateString'] = dateString;
+        }
+        console.log('vadsafsa', tempObj)
+        setFilterArrProperties(tempFilters)
+    }
+
     const handleRemove = (id) => {
         setFilterArrProperties((filterArr.filter(filterObj => filterObj.id !== id)));
     }
 
-    const renderFilter = ({ id, column, selectedFilter, condition, textInput }, index, conditionValue) => {
+    const renderFilter = ({ id, column, selectedFilter, condition, textInput }, index) => {
         const lessThan = "<";
         const lessThanEqualTo = "<=";
         const handleInputChangeDebounce = debounce(handleChange(id, 'textInput'), 300);
@@ -52,7 +66,7 @@ function FilterAction({
                 <div className='single-filter-wrapper'>
                     {(index !== 0) &&
                         <div className='filter-boolean-condition'>
-                            <Select dropdownClassName={s.style1(colors)} value={condition} defaultValue={condition} disabled={index > 1} onChange={handleChange(id, 'condition')} value={conditionValue}>
+                            <Select dropdownClassName={s.style1(colors)} value={condition} defaultValue={condition} disabled={index > 1} onChange={handleChange(id, 'condition')}>
                                 <Option value="and">And</Option>
                                 <Option value="or">Or</Option>
                             </Select>
@@ -88,13 +102,33 @@ function FilterAction({
                                 <Option value="lessThanEqualTo">{lessThanEqualTo}</Option>
                             </Select>
                         }
+                        {
+                            columnDataType[column] === 'date' &&
+                            <Select dropdownClassName={s.style1(colors)} value={selectedFilter} defaultValue='range' onChange={handleChange(id, 'selectedFilter')}>
+                                <Option value="matchDate"> Is</Option>
+                                <Option value="range">Range</Option>
+                            </Select>
+                        }
                     </div>
-                    <div className="filter-text-input">
-                        <Input value={textInput} id={id} placeholder="value" onChange={(e) => {
-                            const input = e.target.value;
-                            handleInputChangeDebounce(input)
-                        }} />
-                    </div>
+                    {
+                        ((columnDataType[column] === 'date' && selectedFilter === 'range' && (
+                            <RangePicker className="range-picker" dropdownClassName={s.style1(colors)} onChange={handleDateChange(id, 'range')} />)))
+                    }
+                    {
+                        ((columnDataType[column] === 'date' && selectedFilter === 'matchDate' && (
+                            <DatePicker className="date-picker" dropdownClassName={s.style1(colors)} onChange={handleDateChange(id, 'single')} />)))
+
+                    }
+                    {
+                        (columnDataType[column] !== 'date') && (
+                            <div className="filter-text-input">
+                                <Input value={textInput} id={id} placeholder="value" onChange={(e) => {
+                                    const input = e.target.value;
+                                    handleInputChangeDebounce(input)
+                                }} />
+                            </div>
+                        )
+                    }
                 </div>
                 <div role="button" onClick={() => handleRemove(id)} style={{ cursor: 'pointer', margin: '0px 10px 0px auto', minWidth: '0px' }}>
                     <Tooltip title="Remove filter rule">
@@ -117,7 +151,7 @@ function FilterAction({
             column,
             selectedFilter: defaultSelection[columnDataType[column]],
             condition: 'or',
-            textInput: ''
+            textInput: '',
         }
         ])
     }
@@ -144,14 +178,11 @@ function FilterAction({
             nodeSelector: '.single-filter-div-wrapper',
             handleSelector: '.drag-outlined-icon'
         };
-        let conditionValue = null;
-        if (filterArr.length === 1) conditionValue = filterArr[0]['condition']
-        if (filterArr.length > 1) conditionValue = filterArr[1]['condition']
         return (
             <div key="43">
                 <div className='filter-overlay-root' style={{ display: 'flex', flexDirection: 'column' }}>
                     <ReactDragListView {...dragProps} lineClassName={lineClassName()}>
-                        {filterArr.map((filterObj, index) => renderFilter(filterObj, index, conditionValue))}
+                        {filterArr.map((filterObj, index) => renderFilter(filterObj, index))}
                     </ReactDragListView>
                 </div>
                 {getAddFilterButton()}

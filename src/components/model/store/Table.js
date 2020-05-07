@@ -1,4 +1,5 @@
 import { observable, action, decorate, computed } from 'mobx';
+import moment from 'moment';
 // import worker from '../../../worker.js';
 // import WebWorker from '../../../workerSetup';
 
@@ -66,17 +67,17 @@ class Table {
     // }
 
 
-    resolveFilters(obj, column, filter, text) {
+    resolveFilters(obj, property) {
+        const column = property['column']
+        const filter = property['selectedFilter']
+        const text = property['textInput']
         switch (filter) {
             case 'contains':
                 return obj[column] && obj[column].includes(text)
-
             case 'is':
                 return obj[column] && obj[column] === text
-
             case 'isNot':
                 return obj[column] ? !obj[column] === text : true
-
             case 'doesNotContain':
                 return obj[column] ? !(obj[column].includes(text)) : true
 
@@ -96,8 +97,19 @@ class Table {
                 return obj[column] ? obj[column] >= parseInt(text) : false
             case 'lessThanEqualTo':
                 return obj[column] ? obj[column] <= parseInt(text) : false
+            case 'matchDate': {
+                const dateString = property['dateString']
+                const tempString = moment(obj[column]).format('YYYY-MM-DD');
+                console.log('dateString', dateString);
+                return obj[column] && (tempString.localeCompare(dateString) === 0 ? true : false)
+            }
+            case 'range':
+                const fromString = property['fromString']
+                const toString = property['toString']
+                const tempString = moment(obj[column]).format('YYYY-MM-DD');
+                return obj[column] && (tempString.localeCompare(toString) === -1 && tempString.localeCompare(fromString) === 1) ? true : false;
             default:
-                return true
+                return true;
         }
     }
 
@@ -132,7 +144,7 @@ class Table {
             const onlyOneFilter = nonEmptyFilter.length === 1;
             nonEmptyFilter.forEach(property => {
                 const condition = property['condition'] || 'or';
-                const resolvedFilter = this.resolveFilters(obj, property['column'], property['selectedFilter'], property['textInput']);
+                const resolvedFilter = this.resolveFilters(obj, property);
                 if (condition === 'or') {
                     toTakeOrNot = toTakeOrNot || resolvedFilter;
                 } else if (onlyOneFilter) {
