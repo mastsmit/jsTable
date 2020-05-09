@@ -100,6 +100,11 @@ export const headerDropdown = (colors) => css`
      justify-content: center;
      margin-left: 10px;
  }
+ .ant-picker-input{
+      input{
+          color: ${colors.cellTextColor};
+      }
+  }
  .filter-column-options,.filter-options,.sorter-column-options{
      display: flex;
      .ant-select-selector{
