@@ -37,17 +37,18 @@ function FilterAction({
     const handleDateChange = (id, filterType) => (dates, dateString) => {
         let tempFilters = [...filterArr];
         const tempObj = tempFilters.find(filterObj => filterObj.id === id);
-
         if (filterType === 'range') {
-            tempObj['fromString'] = dateString[0];
-            tempObj['toString'] = dateString[1];
+            tempObj['fromString'] = dateString ? dateString[0] : undefined;
+            tempObj['toString'] = dateString ? dateString[1] : undefined;
         }
         else {
-            tempObj['dateString'] = dateString;
+            tempObj['dateString'] = dateString ? dateString : undefined;
         }
         console.log('vadsafsa', tempObj)
         setFilterArrProperties(tempFilters)
+
     }
+
 
     const handleRemove = (id) => {
         setFilterArrProperties((filterArr.filter(filterObj => filterObj.id !== id)));
@@ -57,7 +58,6 @@ function FilterAction({
         const lessThan = "<";
         const lessThanEqualTo = "<=";
         const handleInputChangeDebounce = debounce(handleChange(id, 'textInput'), 300);
-
         return (
             <div className={c('single-filter-div-wrapper', s.headerDropdown(colors))} id={id}>
                 <div className='drag-outlined-icon'>
@@ -106,7 +106,7 @@ function FilterAction({
                             columnDataType[column] === 'date' &&
                             <Select dropdownClassName={s.style1(colors)} value={selectedFilter} defaultValue='range' onChange={handleChange(id, 'selectedFilter')}>
                                 <Option value="matchDate"> Is</Option>
-                                <Option value="range">Range</Option>
+                                <Option value="range">Between</Option>
                             </Select>
                         }
                     </div>
@@ -123,8 +123,7 @@ function FilterAction({
                         (columnDataType[column] !== 'date') && (
                             <div className="filter-text-input">
                                 <Input value={textInput} id={id} placeholder="value" onChange={(e) => {
-                                    const input = e.target.value;
-                                    handleInputChangeDebounce(input)
+                                    handleInputChangeDebounce(e.target.value)
                                 }} />
                             </div>
                         )

@@ -123,21 +123,18 @@ const data = [
   },
 ]
 
-data.map(obj => {
-  obj['date'] = moment().toISOString()
-})
 const columns = [
-  {
-    titleString: 'Date',
-    dataIndex: 'date',
-    width: 200,
-    columnDataType: 'date',
-  },
   {
     titleString: 'Amount',
     dataIndex: 'amount',
     type: 'date',
     columnDataType: 'number',
+  },
+  {
+    titleString: 'Date',
+    dataIndex: 'date',
+    width: 200,
+    columnDataType: 'date',
   },
   {
     titleString: 'Column1',
@@ -161,18 +158,19 @@ const columns = [
   },
 ]
 
+const dates = ['2020-1-20', '2020-2-20', '2020-3-20', '2019-1-1', '2019-2-20']
 class App extends Component {
   constructor(props) {
     super(props);
     const data_large_with_unique_keys = data_large.map(obj => {
       obj.key = uuidv4();
+      obj['date'] = moment(dates[Math.floor(Math.random() * dates.length)]).toISOString();
       return obj
     });
     this.state = { isDarkMode: true };
     this.model = new Model();
     this.model.store.syncData({
-      data,
-      // data_large_with_unique_keys,
+      data: data_large_with_unique_keys,
       columns
     });
   }

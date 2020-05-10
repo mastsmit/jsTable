@@ -15,7 +15,17 @@ class Table {
 
 
     syncData(properties) {
-        this.data = properties.data;
+        const dateTypeColumns = properties.columns.filter(obj => obj.columnDataType === 'date');
+        this.data = properties.data.map(obj => {
+            const newObj = {};
+            Object.keys(obj).forEach(key => {
+                if (dateTypeColumns.find(e => e.dataIndex === key)) {
+                    newObj[key + '__processed_date__'] = moment(obj[key]).format('YYYY-MM-DD');
+                }
+                newObj[key] = obj[key];
+            })
+            return newObj;
+        });
         // this.searchedData = this.data
         this.columns = properties.columns;
         if (this.columns.length > 0) {
@@ -98,22 +108,27 @@ class Table {
             case 'lessThanEqualTo':
                 return obj[column] ? obj[column] <= parseInt(text) : false
             case 'matchDate': {
+                if (!obj[column]) return false;
                 const dateString = property['dateString']
-                const tempString = moment(obj[column]).format('YYYY-MM-DD');
-                console.log('dateString', dateString);
-                return obj[column] && (tempString.localeCompare(dateString) === 0 ? true : false)
+                const tempString = obj[column + '__processed_date__'];
+                return tempString.localeCompare(dateString) === 0 ? true : false
             }
             case 'range':
                 const fromString = property['fromString']
                 const toString = property['toString']
-                const tempString = moment(obj[column]).format('YYYY-MM-DD');
+                const tempString = obj[column + '__processed_date__'];
                 return obj[column] && (tempString.localeCompare(toString) === -1 && tempString.localeCompare(fromString) === 1) ? true : false;
             default:
                 return true;
         }
     }
 
-    resolveEmptyFilters(filter, text) {
+    resolveEmptyFilters(filterObj) {
+        const filter = filterObj['selectedFilter']
+        const text = filterObj['textInput']
+        const dateString = filterObj['dateString']
+        const fromString = filterObj['fromString']
+        const toString = filterObj['toString']
         switch (filter) {
             case 'contains':
             case 'is':
@@ -127,6 +142,10 @@ class Table {
             case 'lessThanEqualTo':
                 if (text === '') return true;
                 return false
+            case 'matchDate':
+                return dateString ? false : true
+            case 'range':
+                return (fromString && toString) ? false : true;
             default:
                 return false
         }
@@ -134,12 +153,17 @@ class Table {
 
 
     get filteredData() {
-        const nonEmptyFilter = this.filterArr.filter(filter => !this.resolveEmptyFilters(filter['selectedFilter'], filter['textInput']));
+        const nonEmptyFilter = this.filterArr.filter(filterObj => !this.resolveEmptyFilters(filterObj));
         if (nonEmptyFilter.length === 0) {
             return this.data;
         }
+        if (this.lastNonEmptyFilter) {
+            if (JSON.stringify(this.lastNonEmptyFilter) === JSON.stringify(nonEmptyFilter)) {
+                return this.lastFilteredData;
+            }
+        }
 
-        return this.data.filter(obj => {
+        const x = this.data.filter(obj => {
             let toTakeOrNot = false;
             const onlyOneFilter = nonEmptyFilter.length === 1;
             nonEmptyFilter.forEach(property => {
@@ -155,6 +179,10 @@ class Table {
             });
             return toTakeOrNot;
         });
+        this.lastNonEmptyFilter = JSON.parse(JSON.stringify(nonEmptyFilter));
+        this.lastFilteredData = x;
+        return x;
+
     }
 
     get sortedData() {

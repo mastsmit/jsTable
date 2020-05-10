@@ -149,6 +149,7 @@ class TableComp extends Component {
                     setFilterArrProperties={setFilterArrProperties}
                     filterArr={filterArr}
                     sorterArr={sorterArr}
+                    inputTextArr={inputTextArr}
                     setSorterArrProperties={setSorterArrProperties}
                 />
                 <div className={s.rootTable(this.props.colors)}>
